@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offshore Marine Technology AS — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0B4D8C;
+  --primary-light: #1565B8;
+  --primary-dark: #083A6A;
+  --primary-faint: rgba(11,77,140,0.08);
+  --primary-subtle: rgba(11,77,140,0.15);
+
+  --parchment: #f5f4ed;
+  --ivory: #faf9f5;
+  --white: #ffffff;
+  --warm-sand: #e8e6dc;
+  --border-cream: #f0eee6;
+  --border-warm: #e8e6dc;
+
+  --near-black: #141413;
+  --charcoal: #4d4c48;
+  --olive: #5e5d59;
+  --stone: #716f69;
+  --warm-silver: #b0aea5;
+  --ring-warm: #d1cfc5;
+
+  --success: #2D8A4E;
+  --success-bg: rgba(45,138,78,0.1);
+  --warning: #C4841D;
+  --warning-bg: rgba(196,132,29,0.1);
+  --error: #b53333;
+  --error-bg: rgba(181,51,51,0.1);
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow-ring: 0 0 0 1px var(--border-cream);
+  --shadow-whisper: 0 4px 24px rgba(0,0,0,0.05);
+  --sidebar-width: 260px;
+  --topbar-height: 0px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: var(--parchment); color: var(--near-black); line-height: 1.5; min-height: 100vh; }
+
+/* ============== LOGIN PAGE ============== */
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--parchment);
+}
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+.login-right {
+  flex: 1;
+  background: var(--primary-dark);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  position: relative;
+  overflow: hidden;
+}
+.login-right::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.login-right::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -20%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.02);
+}
+.login-right-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  max-width: 400px;
+  text-align: center;
+}
+.login-right-content h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.login-right-content p {
+  font-size: 15px;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.login-logo-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-logo-icon svg { width: 26px; height: 26px; }
+.login-logo span {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--near-black);
+  letter-spacing: -0.3px;
+}
+.login-card h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--near-black);
+}
+.login-card .subtitle {
+  font-size: 14px;
+  color: var(--olive);
+  margin-bottom: 32px;
+}
+.login-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.role-card {
+  padding: 16px 20px;
+  border: 1px solid var(--border-warm);
+  border-radius: var(--radius);
+  background: var(--ivory);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.role-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-faint);
+  box-shadow: 0 0 0 1px var(--primary-subtle);
+}
+.role-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-faint);
+  box-shadow: 0 0 0 2px var(--primary-subtle);
+}
+.role-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--primary-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.role-icon svg { width: 20px; height: 20px; color: var(--primary); }
+.role-info h3 { font-size: 14px; font-weight: 600; color: var(--near-black); }
+.role-info p { font-size: 12px; color: var(--stone); margin-top: 2px; }
+.login-form-group {
+  margin-bottom: 16px;
+}
+.login-form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 6px;
+}
+.login-form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-warm);
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 14px;
+  background: var(--ivory);
+  color: var(--near-black);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.login-form-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-faint);
+}
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+.login-btn:hover { background: var(--primary-light); }
+
+/* ============== APP SHELL ============== */
+.app { display: none; min-height: 100vh; }
+.app.active { display: flex; }
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--ivory);
+  border-right: 1px solid var(--border-cream);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+.sidebar-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border-cream);
+}
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-logo-icon svg { width: 20px; height: 20px; }
+.sidebar-logo-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--near-black);
+  line-height: 1.2;
+}
+.sidebar-logo-text small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+}
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 16px 12px 6px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  position: relative;
+}
+.nav-link:hover { background: var(--primary-faint); color: var(--primary); }
+.nav-link.active {
+  background: var(--primary-faint);
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background: var(--primary);
+  border-radius: 0 3px 3px 0;
+}
+.nav-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--error);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-cream);
+}
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+}
+.sidebar-user-info { font-size: 13px; font-weight: 500; color: var(--near-black); }
+.sidebar-user-info small { display: block; font-size: 11px; color: var(--stone); font-weight: 400; }
+
+/* Main content */
+.main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
+.page-header {
+  padding: 28px 32px 0;
+}
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--near-black);
+  letter-spacing: -0.3px;
+}
+.page-header p {
+  font-size: 14px;
+  color: var(--olive);
+  margin-top: 4px;
+}
+.page-content {
+  padding: 24px 32px 32px;
+}
+.page { display: none; }
+.page.active { display: block; }
+
+/* ============== KPI CARDS ============== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-ring);
+}
+.kpi-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--near-black);
+  letter-spacing: -0.5px;
+}
+.kpi-change {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.kpi-change.positive { color: var(--success); }
+.kpi-change.negative { color: var(--error); }
+.kpi-change.neutral { color: var(--stone); }
+.kpi-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.kpi-icon svg { width: 18px; height: 18px; }
+.kpi-icon.blue { background: var(--primary-faint); color: var(--primary); }
+.kpi-icon.green { background: var(--success-bg); color: var(--success); }
+.kpi-icon.orange { background: var(--warning-bg); color: var(--warning); }
+.kpi-icon.red { background: var(--error-bg); color: var(--error); }
+
+/* ============== TABLES ============== */
+.card {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-ring);
+  overflow: hidden;
+}
+.card-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-cream);
+}
+.card-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--near-black);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-secondary { background: var(--warm-sand); color: var(--charcoal); box-shadow: 0 0 0 1px var(--ring-warm); }
+.btn-secondary:hover { background: var(--ring-warm); }
+.btn svg { width: 14px; height: 14px; }
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  padding: 10px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--parchment);
+  border-bottom: 1px solid var(--border-cream);
+}
+td {
+  padding: 12px 20px;
+  font-size: 13.5px;
+  color: var(--near-black);
+  border-bottom: 1px solid var(--border-cream);
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(11,77,140,0.02); }
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-active { background: var(--success-bg); color: var(--success); }
+.badge-pending { background: var(--warning-bg); color: var(--warning); }
+.badge-completed { background: var(--primary-faint); color: var(--primary); }
+.badge-critical { background: var(--error-bg); color: var(--error); }
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Progress bars */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--border-warm);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+.progress-fill.blue { background: var(--primary); }
+.progress-fill.green { background: var(--success); }
+.progress-fill.orange { background: var(--warning); }
+
+/* ============== MODAL ============== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20,20,19,0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--ivory);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-cream);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h2 { font-size: 16px; font-weight: 600; }
+.modal-close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--warm-sand);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--charcoal);
+  font-size: 16px;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--ring-warm); }
+.modal-body { padding: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 6px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-warm);
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13.5px;
+  color: var(--near-black);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-faint);
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-cream);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ============== PAGE: TEKNIKERE ============== */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.tech-card {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-ring);
+}
+.tech-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.tech-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+}
+.tech-name { font-size: 14px; font-weight: 600; }
+.tech-role { font-size: 12px; color: var(--stone); }
+.tech-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-cream);
+}
+.tech-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.tech-detail-label { color: var(--stone); }
+.tech-detail-value { color: var(--near-black); font-weight: 500; }
+
+/* ============== PAGE: FARTØY ============== */
+.vessel-hero {
+  background: var(--primary-dark);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  color: white;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.vessel-hero::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.vessel-hero h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  position: relative;
+}
+.vessel-hero p {
+  font-size: 13px;
+  opacity: 0.7;
+  position: relative;
+}
+.vessel-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+  position: relative;
+}
+.vessel-stat {
+  text-align: center;
+  padding: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+}
+.vessel-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.vessel-stat-label {
+  font-size: 11px;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============== PAGE: HMS ============== */
+.hms-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.hms-card {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.hms-card-value {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.hms-card-label {
+  font-size: 12px;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.hms-card.green .hms-card-value { color: var(--success); }
+.hms-card.orange .hms-card-value { color: var(--warning); }
+.hms-card.red .hms-card-value { color: var(--error); }
+
+/* ============== ARGON BADGE ============== */
+.argon-badge {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--stone);
+  box-shadow: var(--shadow-whisper);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.argon-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+/* ============== HAMBURGER ============== */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 150;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--ivory);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: var(--shadow-whisper);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--near-black);
+  border-radius: 1px;
+  transition: all 0.2s;
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20,20,19,0.4);
+  z-index: 90;
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .vessel-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.open { display: block; }
+  .main { margin-left: 0; }
+  .page-header { padding: 70px 20px 0; }
+  .page-content { padding: 20px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .tech-grid { grid-template-columns: 1fr; }
+  .hms-summary { grid-template-columns: 1fr; }
+  .vessel-stats { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+  .table-wrap { margin: 0 -20px; }
+  table { min-width: 600px; }
+  .login-right { display: none; }
+  .login-left { padding: 24px; }
+  .card-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .vessel-stats { grid-template-columns: 1fr; }
+  .page-header h1 { font-size: 18px; }
+}
+
+/* ============== EXPANDABLE PROJECT ROWS ============== */
+.project-toggle {
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  color: var(--stone);
+  transition: transform 0.2s;
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+}
+.project-detail-row td {
+  padding: 0 !important;
+  border-bottom: 1px solid var(--border-cream);
+}
+.project-detail-panel {
+  padding: 20px 24px;
+  background: var(--parchment);
+}
+.project-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.project-detail-section h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--near-black);
+  margin-bottom: 10px;
+}
+.project-detail-section .form-group { margin-bottom: 10px; }
+.project-detail-section .form-group label { font-size: 12px; }
+.project-detail-section .form-group input,
+.project-detail-section .form-group textarea {
+  font-size: 12.5px;
+  padding: 7px 10px;
+}
+.attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 8px;
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: 4px;
+  font-size: 11.5px;
+}
+.attachment-item-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--charcoal);
+}
+.attachment-item-actions {
+  display: flex;
+  gap: 4px;
+}
+.attachment-item-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--stone);
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+.attachment-item-actions button:hover { color: var(--primary); background: var(--primary-faint); }
+.attachment-item-actions button.delete-btn:hover { color: var(--error); background: var(--error-bg); }
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  background: var(--warm-sand);
+  border: 1px solid var(--ring-warm);
+  border-radius: 5px;
+  font-family: var(--font);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.file-upload-btn:hover { background: var(--ring-warm); }
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+  color: var(--charcoal);
+}
+.checkbox-row input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* ============== STATUS SELECT ============== */
+.status-select {
+  padding: 3px 8px;
+  border: 1px solid var(--border-warm);
+  border-radius: 20px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--ivory);
+  color: var(--near-black);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23716f69' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 22px;
+  transition: border-color 0.2s;
+}
+.status-select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-faint); }
+.status-select.status-aktiv { background-color: rgba(45,138,78,0.08); color: var(--success); border-color: rgba(45,138,78,0.25); }
+.status-select.status-planlagt { background-color: rgba(196,132,29,0.08); color: var(--warning); border-color: rgba(196,132,29,0.25); }
+.status-select.status-fullfort { background-color: rgba(11,77,140,0.08); color: var(--primary); border-color: rgba(11,77,140,0.25); }
+.status-select.status-standby { background-color: rgba(94,93,89,0.08); color: var(--olive); border-color: rgba(94,93,89,0.25); }
+
+/* ============== GJOREMAL (TODO) ============== */
+.todo-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.todo-filter-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border-warm);
+  border-radius: 20px;
+  background: var(--ivory);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.todo-filter-btn:hover { background: var(--primary-faint); color: var(--primary); }
+.todo-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.todo-form {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+.todo-form.active { display: block; }
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.todo-card {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: var(--shadow-ring);
+  transition: all 0.15s;
+}
+.todo-card:hover { box-shadow: var(--shadow-whisper); }
+.todo-card.completed {
+  opacity: 0.6;
+}
+.todo-card.completed .todo-title {
+  text-decoration: line-through;
+}
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.todo-content { flex: 1; }
+.todo-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--near-black);
+  margin-bottom: 2px;
+}
+.todo-desc {
+  font-size: 12.5px;
+  color: var(--olive);
+  margin-bottom: 6px;
+}
+.todo-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.todo-meta .badge { font-size: 10.5px; padding: 2px 8px; }
+.todo-due {
+  font-size: 11px;
+  color: var(--stone);
+}
+.todo-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--stone);
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.todo-delete:hover { color: var(--error); background: var(--error-bg); }
+
+/* ============== RETTSKRIVING ============== */
+.rettskriving-output {
+  display: none;
+  margin-top: 20px;
+}
+.rettskriving-output.active { display: block; }
+.rettskriving-result {
+  background: var(--ivory);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.rettskriving-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.rettskriving-result-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--near-black);
+}
+.rettskriving-text {
+  font-size: 13.5px;
+  color: var(--near-black);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  background: var(--white);
+  border: 1px solid var(--border-cream);
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.rettskriving-loading {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  color: var(--olive);
+  font-size: 13.5px;
+}
+.rettskriving-loading.active { display: flex; }
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-warm);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 768px) {
+  .project-detail-grid { grid-template-columns: 1fr; }
+  .todo-filters { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== LOGIN PAGE ============== -->
+<div class="login-page" id="loginPage">
+  <div class="login-left">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12"/><path d="M3 18h18"/><path d="M12 18V8"/><path d="M7 18v-4"/><path d="M17 18v-6"/></svg>
+        </div>
+        <span>OMT Dashboard</span>
+      </div>
+      <h1>Velkommen tilbake</h1>
+      <p class="subtitle">Logg inn for å administrere prosjekter, teknikere og operasjoner</p>
+
+      <div class="login-roles" id="roleCards">
+        <div class="role-card" onclick="selectRole(this, 'Admin')">
+          <div class="role-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="role-info">
+            <h3>Administrator</h3>
+            <p>Full tilgang til alle moduler og innstillinger</p>
+          </div>
+        </div>
+        <div class="role-card" onclick="selectRole(this, 'Prosjektleder')">
+          <div class="role-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="role-info">
+            <h3>Prosjektleder</h3>
+            <p>Administrer prosjekter, tidsplaner og ressurser</p>
+          </div>
+        </div>
+        <div class="role-card" onclick="selectRole(this, 'Tekniker')">
+          <div class="role-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="role-info">
+            <h3>Tekniker</h3>
+            <p>Se oppdrag, registrer timer og HMS-rapporter</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-form-group">
+        <label for="loginEmail">E-post</label>
+        <input type="email" placeholder="navn@omt.as" id="loginEmail">
+      </div>
+      <div class="login-form-group">
+        <label for="loginPassword">Passord</label>
+        <input type="password" placeholder="Skriv inn passord" id="loginPassword">
+      </div>
+      <button class="login-btn" onclick="doLogin()">Logg inn</button>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-right-content">
+      <h2>Offshore Marine Technology AS</h2>
+      <p>Komplett oversikt over prosjekter, teknikere, fartøy og HMS. Sertifisert Schneider Electric EcoXpert Partner. ISO 9001.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============== APP ============== -->
+<div class="app" id="app">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12"/><path d="M3 18h18"/><path d="M12 18V8"/><path d="M7 18v-4"/><path d="M17 18v-6"/></svg>
+        </div>
+        <div class="sidebar-logo-text">
+          OMT Dashboard
+          <small>Offshore Marine Technology</small>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Hovedmeny</div>
+      <a class="nav-link active" onclick="showPage('oversikt')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Oversikt
+      </a>
+      <a class="nav-link" onclick="showPage('prosjekter')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Prosjekter
+      </a>
+      <a class="nav-link" onclick="showPage('gjoremal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Gjøremål
+      </a>
+      <a class="nav-link" onclick="showPage('teknikere')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Teknikere
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-link" onclick="showPage('fartoy')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.5 0 2.5 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.4 11.4 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/><path d="M12 1v4"/></svg>
+        Fartøy
+      </a>
+      <div class="nav-section-label">Sikkerhet</div>
+      <a class="nav-link" onclick="showPage('hms')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        HMS
+        <span class="nav-badge">2</span>
+      </a>
+      <div class="nav-section-label">Arkiv</div>
+      <a class="nav-link" onclick="showPage('arkiv')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        Arkiv
+      </a>
+      <div class="nav-section-label">Verktøy</div>
+      <a class="nav-link" onclick="showPage('rettskriving')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Rettskriving
+      </a>
+      <div class="nav-section-label">System</div>
+      <a class="nav-link" onclick="showPage('innstillinger')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        Innstillinger
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="userAvatar">AA</div>
+        <div class="sidebar-user-info">
+          <span id="userName">Asle Aase</span>
+          <small id="userRole">Administrator</small>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <!-- ============== OVERSIKT ============== -->
+    <div class="page active" id="page-oversikt">
+      <div class="page-header">
+        <h1>Oversikt</h1>
+        <p>Sanntidsoversikt over prosjekter, teknikere og operasjoner</p>
+      </div>
+      <div class="page-content">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="kpi-label">Aktive prosjekter</div>
+            <div class="kpi-value">12</div>
+            <div class="kpi-change positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+              +3 denne måneden
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="kpi-label">Teknikere i felt</div>
+            <div class="kpi-value">24</div>
+            <div class="kpi-change neutral">av 36 totalt</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div class="kpi-label">Timer denne uken</div>
+            <div class="kpi-value">847</div>
+            <div class="kpi-change positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+              +12% vs forrige uke
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="kpi-label">HMS-avvik</div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-change negative">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+              Krever oppfølging
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <h2>Aktive prosjekter</h2>
+            <a class="btn btn-secondary" onclick="showPage('prosjekter')" style="cursor:pointer;">
+              Se alle →
+            </a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Prosjekt</th>
+                  <th>Kunde</th>
+                  <th>Type</th>
+                  <th>Lokasjon</th>
+                  <th>Fremdrift</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">Helideck oppgradering</td>
+                  <td>Equinor ASA</td>
+                  <td>Elektroinstallasjon</td>
+                  <td>Gullfaks B</td>
+                  <td><div class="progress-bar"><div class="progress-fill blue" style="width:72%"></div></div><span style="font-size:11px;color:var(--stone);">72%</span></td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">SCR-system installasjon</td>
+                  <td>Solstad Offshore</td>
+                  <td>Utslippsreduksjon</td>
+                  <td>Normand Clipper</td>
+                  <td><div class="progress-bar"><div class="progress-fill green" style="width:95%"></div></div><span style="font-size:11px;color:var(--stone);">95%</span></td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">VFD-oppgradering pumpesystem</td>
+                  <td>Aker BP</td>
+                  <td>Energioptimalisering</td>
+                  <td>Ivar Aasen</td>
+                  <td><div class="progress-bar"><div class="progress-fill blue" style="width:45%"></div></div><span style="font-size:11px;color:var(--stone);">45%</span></td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Winterization — maskinrom</td>
+                  <td>DOF Subsea</td>
+                  <td>Winterization</td>
+                  <td>Skandi Neptune</td>
+                  <td><div class="progress-bar"><div class="progress-fill orange" style="width:30%"></div></div><span style="font-size:11px;color:var(--stone);">30%</span></td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Schneider EcoStruxure integrasjon</td>
+                  <td>ConocoPhillips</td>
+                  <td>Automasjon</td>
+                  <td>Ekofisk</td>
+                  <td><div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div><span style="font-size:11px;color:var(--stone);">60%</span></td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="card">
+            <div class="card-header"><h2>Fartøystatus — MS OMT</h2></div>
+            <div style="padding:20px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                <span class="badge badge-active"><span class="badge-dot"></span>Operativ</span>
+                <span style="font-size:12px;color:var(--stone);">Sist oppdatert: 18.04.2026 kl. 08:15</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div><span style="font-size:11px;color:var(--stone);text-transform:uppercase;">Posisjon</span><br><span style="font-size:14px;font-weight:600;">Stavanger havn</span></div>
+                <div><span style="font-size:11px;color:var(--stone);text-transform:uppercase;">Neste oppdrag</span><br><span style="font-size:14px;font-weight:600;">22.04 — Gullfaks</span></div>
+                <div><span style="font-size:11px;color:var(--stone);text-transform:uppercase;">Mannskap</span><br><span style="font-size:14px;font-weight:600;">6 av 8</span></div>
+                <div><span style="font-size:11px;color:var(--stone);text-transform:uppercase;">Drivstoff</span><br><span style="font-size:14px;font-weight:600;">78%</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h2>Siste aktivitet</h2></div>
+            <div style="padding:12px 20px;">
+              <div style="padding:10px 0;border-bottom:1px solid var(--border-cream);font-size:13px;">
+                <span style="color:var(--primary);font-weight:600;">Jone Midbøe</span> <span style="color:var(--olive);">fullførte HMS-sjekkliste for</span> <span style="font-weight:500;">Normand Clipper</span>
+                <div style="font-size:11px;color:var(--stone);margin-top:2px;">I dag kl. 07:42</div>
+              </div>
+              <div style="padding:10px 0;border-bottom:1px solid var(--border-cream);font-size:13px;">
+                <span style="color:var(--primary);font-weight:600;">Håvard Seljeskog</span> <span style="color:var(--olive);">opprettet nytt prosjekt</span> <span style="font-weight:500;">VFD-oppgradering Ivar Aasen</span>
+                <div style="font-size:11px;color:var(--stone);margin-top:2px;">I går kl. 14:20</div>
+              </div>
+              <div style="padding:10px 0;border-bottom:1px solid var(--border-cream);font-size:13px;">
+                <span style="color:var(--primary);font-weight:600;">Tone Medhaug</span> <span style="color:var(--olive);">la til ny kunde</span> <span style="font-weight:500;">DOF Subsea AS</span>
+                <div style="font-size:11px;color:var(--stone);margin-top:2px;">16.04 kl. 10:05</div>
+              </div>
+              <div style="padding:10px 0;font-size:13px;">
+                <span style="color:var(--primary);font-weight:600;">Ingunn Søiland</span> <span style="color:var(--olive);">registrerte HMS-avvik #47</span> <span style="font-weight:500;">Gullfaks B — manglende skilting</span>
+                <div style="font-size:11px;color:var(--stone);margin-top:2px;">15.04 kl. 16:30</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== PROSJEKTER ============== -->
+    <div class="page" id="page-prosjekter">
+      <div class="page-header">
+        <h1>Prosjekter</h1>
+        <p>Oversikt over alle aktive og planlagte prosjekter</p>
+      </div>
+      <div class="page-content">
+        <div class="card">
+          <div class="card-header">
+            <h2>Alle prosjekter</h2>
+            <button class="btn btn-primary" onclick="openModal('prosjekt')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nytt prosjekt
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table id="projectTable">
+              <thead>
+                <tr>
+                  <th style="width:30px;"></th>
+                  <th>Prosjekt</th>
+                  <th>Kunde</th>
+                  <th>Type</th>
+                  <th>Lokasjon</th>
+                  <th>Start</th>
+                  <th>Frist</th>
+                  <th>Fremdrift</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="projectTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== TEKNIKERE ============== -->
+    <div class="page" id="page-teknikere">
+      <div class="page-header">
+        <h1>Teknikere</h1>
+        <p>Oversikt over teamet, tilgjengelighet og sertifiseringer</p>
+      </div>
+      <div class="page-content">
+        <div class="kpi-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom:24px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Totalt ansatte</div>
+            <div class="kpi-value">36</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">I felt</div>
+            <div class="kpi-value" style="color:var(--success);">24</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Tilgjengelige</div>
+            <div class="kpi-value" style="color:var(--primary);">9</div>
+          </div>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <div class="tech-avatar" style="background:var(--primary);">EL</div>
+              <div>
+                <div class="tech-name">Erik Larsen</div>
+                <div class="tech-role">Senior elektroingeniør</div>
+              </div>
+            </div>
+            <span class="badge badge-active"><span class="badge-dot"></span>I felt</span>
+            <div class="tech-details">
+              <div class="tech-detail"><span class="tech-detail-label">Oppdrag</span><span class="tech-detail-value">Gullfaks B — Helideck</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Sertifisering</span><span class="tech-detail-value">FSE, EcoXpert</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Tilbake</span><span class="tech-detail-value">25.04.2026</span></div>
+            </div>
+          </div>
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <div class="tech-avatar" style="background:#2D8A4E;">KH</div>
+              <div>
+                <div class="tech-name">Knut Hansen</div>
+                <div class="tech-role">Automasjonstekniker</div>
+              </div>
+            </div>
+            <span class="badge badge-active"><span class="badge-dot"></span>I felt</span>
+            <div class="tech-details">
+              <div class="tech-detail"><span class="tech-detail-label">Oppdrag</span><span class="tech-detail-value">Normand Clipper — SCR</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Sertifisering</span><span class="tech-detail-value">FSE, Schneider VFD</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Tilbake</span><span class="tech-detail-value">22.04.2026</span></div>
+            </div>
+          </div>
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <div class="tech-avatar" style="background:#C4841D;">MB</div>
+              <div>
+                <div class="tech-name">Magnus Berg</div>
+                <div class="tech-role">Servicetekniker</div>
+              </div>
+            </div>
+            <span class="badge badge-completed"><span class="badge-dot"></span>Tilgjengelig</span>
+            <div class="tech-details">
+              <div class="tech-detail"><span class="tech-detail-label">Neste oppdrag</span><span class="tech-detail-value">Skandi Neptune (01.05)</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Sertifisering</span><span class="tech-detail-value">FSE, HUET, Kran</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Base</span><span class="tech-detail-value">Haugalandet</span></div>
+            </div>
+          </div>
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <div class="tech-avatar" style="background:var(--primary-dark);">TN</div>
+              <div>
+                <div class="tech-name">Thomas Nilsen</div>
+                <div class="tech-role">Elektroinstallatør</div>
+              </div>
+            </div>
+            <span class="badge badge-active"><span class="badge-dot"></span>I felt</span>
+            <div class="tech-details">
+              <div class="tech-detail"><span class="tech-detail-label">Oppdrag</span><span class="tech-detail-value">Ekofisk — EcoStruxure</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Sertifisering</span><span class="tech-detail-value">FSE, EcoXpert, ATEX</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Tilbake</span><span class="tech-detail-value">28.04.2026</span></div>
+            </div>
+          </div>
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <div class="tech-avatar" style="background:#b53333;">SA</div>
+              <div>
+                <div class="tech-name">Silje Andersen</div>
+                <div class="tech-role">Prosjektingeniør</div>
+              </div>
+            </div>
+            <span class="badge badge-completed"><span class="badge-dot"></span>Tilgjengelig</span>
+            <div class="tech-details">
+              <div class="tech-detail"><span class="tech-detail-label">Neste oppdrag</span><span class="tech-detail-value">Seven Vega (22.04)</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Sertifisering</span><span class="tech-detail-value">FSE, PLS, SCADA</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Base</span><span class="tech-detail-value">Stavanger</span></div>
+            </div>
+          </div>
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <div class="tech-avatar" style="background:#5e5d59;">OJ</div>
+              <div>
+                <div class="tech-name">Ole Johannessen</div>
+                <div class="tech-role">Maritim servicetekniker</div>
+              </div>
+            </div>
+            <span class="badge badge-active"><span class="badge-dot"></span>I felt</span>
+            <div class="tech-details">
+              <div class="tech-detail"><span class="tech-detail-label">Oppdrag</span><span class="tech-detail-value">MS OMT — vedlikehold</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Sertifisering</span><span class="tech-detail-value">FSE, STCW, Maskinistbrev</span></div>
+              <div class="tech-detail"><span class="tech-detail-label">Divisjon</span><span class="tech-detail-value">Maritim Service</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== FARTØY ============== -->
+    <div class="page" id="page-fartoy">
+      <div class="page-header">
+        <h1>Fartøy</h1>
+        <p>Maritim servicedivisjon og fartøyoversikt</p>
+      </div>
+      <div class="page-content">
+        <div class="vessel-hero">
+          <h2>MS OMT</h2>
+          <p>Eget servicefartøy, anskaffet september 2025. Maritim servicedivisjon ledet av Håvard Gysland Seljeskog.</p>
+          <div class="vessel-stats">
+            <div class="vessel-stat">
+              <div class="vessel-stat-value">142</div>
+              <div class="vessel-stat-label">Driftsdøgn 2026</div>
+            </div>
+            <div class="vessel-stat">
+              <div class="vessel-stat-value">23</div>
+              <div class="vessel-stat-label">Oppdrag utført</div>
+            </div>
+            <div class="vessel-stat">
+              <div class="vessel-stat-value">97%</div>
+              <div class="vessel-stat-label">Oppetid</div>
+            </div>
+            <div class="vessel-stat">
+              <div class="vessel-stat-value">6</div>
+              <div class="vessel-stat-label">Mannskap ombord</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header">
+            <h2>Kommende oppdrag</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Oppdrag</th>
+                  <th>Kunde</th>
+                  <th>Lokasjon</th>
+                  <th>Dato</th>
+                  <th>Varighet</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">Kabellegging og terminering</td>
+                  <td>Equinor ASA</td>
+                  <td>Gullfaks B</td>
+                  <td>22.04.2026</td>
+                  <td>5 dager</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Generatorservice</td>
+                  <td>Eidesvik Offshore</td>
+                  <td>Viking Energy — kai</td>
+                  <td>28.04.2026</td>
+                  <td>2 dager</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Navigasjonslys inspeksjon</td>
+                  <td>Solstad Offshore</td>
+                  <td>Normand Vision — offshore</td>
+                  <td>05.05.2026</td>
+                  <td>3 dager</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Tilbud sendt</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h2>Vedlikeholdslogg</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Dato</th>
+                  <th>Type</th>
+                  <th>Beskrivelse</th>
+                  <th>Utført av</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>15.04.2026</td>
+                  <td>Periodisk</td>
+                  <td>500-timers motorservice</td>
+                  <td>Ole Johannessen</td>
+                  <td><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
+                </tr>
+                <tr>
+                  <td>02.04.2026</td>
+                  <td>Inspeksjon</td>
+                  <td>Årlig sjøfartsdirektorat-inspeksjon</td>
+                  <td>Ekstern</td>
+                  <td><span class="badge badge-completed"><span class="badge-dot"></span>Godkjent</span></td>
+                </tr>
+                <tr>
+                  <td>20.03.2026</td>
+                  <td>Korrektiv</td>
+                  <td>Bytte av hydraulikkslange — dekskran</td>
+                  <td>Ole Johannessen</td>
+                  <td><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== HMS ============== -->
+    <div class="page" id="page-hms">
+      <div class="page-header">
+        <h1>HMS</h1>
+        <p>Helse, miljø og sikkerhet. ISO 9001-sertifisert siden februar 2026.</p>
+      </div>
+      <div class="page-content">
+        <div class="hms-summary">
+          <div class="hms-card green">
+            <div class="hms-card-value">247</div>
+            <div class="hms-card-label">Dager uten fraværsskade</div>
+          </div>
+          <div class="hms-card orange">
+            <div class="hms-card-value">2</div>
+            <div class="hms-card-label">Åpne avvik</div>
+          </div>
+          <div class="hms-card green">
+            <div class="hms-card-value">98%</div>
+            <div class="hms-card-label">Sjekklister fullført</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header">
+            <h2>Avviksrapporter</h2>
+            <button class="btn btn-primary" onclick="openModal('avvik')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nytt avvik
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Beskrivelse</th>
+                  <th>Lokasjon</th>
+                  <th>Alvorlighet</th>
+                  <th>Rapportert</th>
+                  <th>Ansvarlig</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">#47</td>
+                  <td>Manglende sikkerhetsskilting i E-rom</td>
+                  <td>Gullfaks B</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Medium</span></td>
+                  <td>15.04.2026</td>
+                  <td>Ingunn Søiland</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Under behandling</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">#46</td>
+                  <td>Utgått brannslukker i verksted</td>
+                  <td>Stavanger kontor</td>
+                  <td><span class="badge badge-critical"><span class="badge-dot"></span>Høy</span></td>
+                  <td>12.04.2026</td>
+                  <td>Ingunn Søiland</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Bestilt erstatning</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">#45</td>
+                  <td>Glatt dekk ved lasteområde</td>
+                  <td>MS OMT</td>
+                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Medium</span></td>
+                  <td>08.04.2026</td>
+                  <td>Håvard Seljeskog</td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Lukket</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">#44</td>
+                  <td>Manglende verneutstyr — høyspentrom</td>
+                  <td>Normand Clipper</td>
+                  <td><span class="badge badge-critical"><span class="badge-dot"></span>Høy</span></td>
+                  <td>03.04.2026</td>
+                  <td>Ingunn Søiland</td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Lukket</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h2>Sertifiseringsstatus</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sertifisering</th>
+                  <th>Utsteder</th>
+                  <th>Gyldig til</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">ISO 9001:2015</td>
+                  <td>DNV</td>
+                  <td>15.02.2029</td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Schneider EcoXpert Power Service</td>
+                  <td>Schneider Electric</td>
+                  <td>01.11.2027</td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Sentral godkjenning — Elektro</td>
+                  <td>Direktoratet for byggkvalitet</td>
+                  <td>01.09.2027</td>
+                  <td><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== INNSTILLINGER ============== -->
+    <div class="page" id="page-innstillinger">
+      <div class="page-header">
+        <h1>Innstillinger</h1>
+        <p>Administrer brukere, varsler og systemkonfigurasjon</p>
+      </div>
+      <div class="page-content">
+        <div class="card">
+          <div class="card-header"><h2>Generelle innstillinger</h2></div>
+          <div style="padding:24px;">
+            <div class="form-group">
+              <label>Selskapsnavn</label>
+              <input type="text" value="Offshore Marine Technology AS" readonly>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Org. nummer</label>
+                <input type="text" value="932 726 114" readonly>
+              </div>
+              <div class="form-group">
+                <label>Hovedkontor</label>
+                <input type="text" value="Stavanger">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>E-post</label>
+                <input type="email" value="post@omt.as">
+              </div>
+              <div class="form-group">
+                <label>Telefon</label>
+                <input type="tel" value="+47 95 12 94 64">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Tidssone</label>
+              <select>
+                <option selected>Europe/Oslo (CET/CEST)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ============== GJØREMÅL ============== -->
+    <div class="page" id="page-gjoremal">
+      <div class="page-header">
+        <h1>Gjøremål</h1>
+        <p>Oppgaver og påminnelser for teamet</p>
+      </div>
+      <div class="page-content">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div class="todo-filters">
+            <button class="todo-filter-btn active" onclick="filterTodos('alle')">Alle</button>
+            <button class="todo-filter-btn" onclick="filterTodos('aktive')">Aktive</button>
+            <button class="todo-filter-btn" onclick="filterTodos('fullforte')">Fullførte</button>
+          </div>
+          <button class="btn btn-primary" onclick="toggleTodoForm()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Legg til gjøremål
+          </button>
+        </div>
+
+        <div class="todo-form" id="todoForm">
+          <div class="form-group">
+            <label>Tittel *</label>
+            <input type="text" id="todoTitle" placeholder="Hva skal gjøres?">
+          </div>
+          <div class="form-group">
+            <label>Beskrivelse</label>
+            <textarea id="todoDesc" rows="2" placeholder="Valgfri beskrivelse"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Prioritet</label>
+              <select id="todoPriority">
+                <option value="Lav">Lav</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Høy">Høy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Frist</label>
+              <input type="date" id="todoDue">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button class="btn btn-primary" onclick="addTodo()">Legg til</button>
+            <button class="btn btn-secondary" onclick="toggleTodoForm()">Avbryt</button>
+          </div>
+        </div>
+
+        <div class="todo-list" id="todoList"></div>
+      </div>
+    </div>
+
+    <!-- ============== ARKIV ============== -->
+    <div class="page" id="page-arkiv">
+      <div class="page-header">
+        <h1>Arkiv</h1>
+        <p>Fullførte prosjekter</p>
+      </div>
+      <div class="page-content">
+        <div class="card">
+          <div class="card-header">
+            <h2>Fullførte prosjekter</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Prosjekt</th>
+                  <th>Kunde</th>
+                  <th>Type</th>
+                  <th>Lokasjon</th>
+                  <th>Fullført</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="archiveTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== RETTSKRIVING ============== -->
+    <div class="page" id="page-rettskriving">
+      <div class="page-header">
+        <h1>Rettskriving</h1>
+        <p>Lim inn tekst for korrekturlesing. Språket beholdes automatisk.</p>
+      </div>
+      <div class="page-content">
+        <div class="card">
+          <div class="card-header"><h2>Korrekturlesing</h2></div>
+          <div style="padding:24px;">
+            <div class="form-group">
+              <label>Tekst</label>
+              <textarea id="rettskrivingInput" rows="8" placeholder="Lim inn tekst her for korrekturlesing..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="doRettskriving()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              Rett tekst
+            </button>
+
+            <div class="rettskriving-loading" id="rettskrivingLoading">
+              <div class="spinner"></div>
+              Retter...
+            </div>
+
+            <div class="rettskriving-output" id="rettskrivingOutput">
+              <div class="rettskriving-result">
+                <div class="rettskriving-result-header">
+                  <h3>Korrigert tekst</h3>
+                  <button class="btn btn-secondary" onclick="copyRettskriving()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Kopier
+                  </button>
+                </div>
+                <div class="rettskriving-text" id="rettskrivingResult"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============== MODALS ============== -->
+<div class="modal-overlay" id="modal-prosjekt">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Nytt prosjekt</h2>
+      <button class="modal-close" onclick="closeModal('prosjekt')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Prosjektnavn</label>
+        <input type="text" placeholder="F.eks. VFD-oppgradering — Normand Vision">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kunde</label>
+          <input type="text" placeholder="Kundenavn">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select>
+            <option>Elektroinstallasjon</option>
+            <option>Automasjon</option>
+            <option>Energioptimalisering</option>
+            <option>Utslippsreduksjon</option>
+            <option>Winterization</option>
+            <option>Sikkerhetssystem</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Lokasjon</label>
+        <input type="text" placeholder="Plattform, fartøy eller anlegg">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Startdato</label>
+          <input type="date">
+        </div>
+        <div class="form-group">
+          <label>Frist</label>
+          <input type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Beskrivelse</label>
+        <textarea rows="3" placeholder="Kort beskrivelse av oppdraget"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('prosjekt')">Avbryt</button>
+      <button class="btn btn-primary" onclick="closeModal('prosjekt')">Opprett prosjekt</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-avvik">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Nytt avvik</h2>
+      <button class="modal-close" onclick="closeModal('avvik')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Beskrivelse</label>
+        <textarea rows="3" placeholder="Beskriv avviket"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Lokasjon</label>
+          <input type="text" placeholder="Hvor ble avviket observert?">
+        </div>
+        <div class="form-group">
+          <label>Alvorlighet</label>
+          <select>
+            <option>Lav</option>
+            <option>Medium</option>
+            <option>Høy</option>
+            <option>Kritisk</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ansvarlig</label>
+        <select>
+          <option>Ingunn Søiland</option>
+          <option>Håvard Gysland Seljeskog</option>
+          <option>Jone Midbøe</option>
+          <option>Asle Aase</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('avvik')">Avbryt</button>
+      <button class="btn btn-primary" onclick="closeModal('avvik')">Registrer avvik</button>
+    </div>
+  </div>
+</div>
+
+<!-- Argon Badge -->
+<div class="argon-badge" id="argonBadge" style="display:none;">
+  <span class="argon-badge-dot"></span>
+  Automatisert av ArgonSolutions
+</div>
+
+<script>
+let selectedRole = '';
+
+/* ============== DEFAULT PROJECT DATA ============== */
+const defaultProjects = [
+  { name:'Helideck oppgradering', kunde:'Equinor ASA', type:'Elektroinstallasjon', lokasjon:'Gullfaks B', start:'01.03.2026', frist:'15.06.2026', progress:72, progressColor:'blue', status:'Aktiv' },
+  { name:'SCR-system installasjon', kunde:'Solstad Offshore', type:'Utslippsreduksjon', lokasjon:'Normand Clipper', start:'10.01.2026', frist:'30.04.2026', progress:95, progressColor:'green', status:'Aktiv' },
+  { name:'VFD-oppgradering pumpesystem', kunde:'Aker BP', type:'Energioptimalisering', lokasjon:'Ivar Aasen', start:'05.04.2026', frist:'20.08.2026', progress:45, progressColor:'blue', status:'Aktiv' },
+  { name:'Winterization — maskinrom', kunde:'DOF Subsea', type:'Winterization', lokasjon:'Skandi Neptune', start:'01.05.2026', frist:'30.09.2026', progress:30, progressColor:'orange', status:'Planlagt' },
+  { name:'Schneider EcoStruxure integrasjon', kunde:'ConocoPhillips', type:'Automasjon', lokasjon:'Ekofisk', start:'15.03.2026', frist:'01.07.2026', progress:60, progressColor:'blue', status:'Aktiv' },
+  { name:'Tavleoppgradering — E-rom', kunde:'Vår Energi', type:'Elektroinstallasjon', lokasjon:'Balder FPU', start:'20.02.2026', frist:'10.05.2026', progress:88, progressColor:'green', status:'Aktiv' },
+  { name:'Nødlyssystem fartøy', kunde:'Eidesvik Offshore', type:'Sikkerhetssystem', lokasjon:'Viking Energy', start:'01.02.2026', frist:'15.04.2026', progress:100, progressColor:'green', status:'Fullført' },
+  { name:'Soft Starter installasjon', kunde:'Odfjell Drilling', type:'Energioptimalisering', lokasjon:'Deepsea Atlantic', start:'15.05.2026', frist:'01.09.2026', progress:10, progressColor:'orange', status:'Planlagt' },
+  { name:'Kraftforsyning oppgradering', kunde:'Subsea 7', type:'Elektroinstallasjon', lokasjon:'Seven Vega', start:'10.04.2026', frist:'20.07.2026', progress:35, progressColor:'blue', status:'Aktiv' }
+];
+
+function getProjects() {
+  let stored = localStorage.getItem('omt_projects');
+  if (!stored) {
+    localStorage.setItem('omt_projects', JSON.stringify(defaultProjects));
+    return JSON.parse(JSON.stringify(defaultProjects));
+  }
+  return JSON.parse(stored);
+}
+function saveProjects(projects) {
+  localStorage.setItem('omt_projects', JSON.stringify(projects));
+}
+function getProjectData(projectName) {
+  let data = localStorage.getItem('omt_project_data_' + projectName);
+  return data ? JSON.parse(data) : { attachments:[], tilbudMottatt:false, tilbudFile:null, poMottatt:false, poFile:null, kontaktperson:'', epost:'', notater:'' };
+}
+function saveProjectData(projectName, data) {
+  localStorage.setItem('omt_project_data_' + projectName, JSON.stringify(data));
+}
+
+function getStatusClass(status) {
+  const map = { 'Aktiv':'status-aktiv', 'Planlagt':'status-planlagt', 'Fullført':'status-fullfort', 'Standby':'status-standby' };
+  return map[status] || '';
+}
+
+function escapeAttr(str) {
+  return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderProjects() {
+  const projects = getProjects();
+  const tbody = document.getElementById('projectTableBody');
+  while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+
+  projects.forEach(function(p, idx) {
+    if (p.status === 'Fullført') return;
+
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-project-idx', idx);
+
+    // Toggle cell
+    const tdToggle = document.createElement('td');
+    const toggleSpan = document.createElement('span');
+    toggleSpan.className = 'project-toggle';
+    toggleSpan.textContent = '\u25B6';
+    toggleSpan.onclick = function(){ toggleProjectDetail(idx); };
+    tdToggle.appendChild(toggleSpan);
+    tr.appendChild(tdToggle);
+
+    // Name
+    const tdName = document.createElement('td');
+    tdName.style.fontWeight = '600';
+    tdName.textContent = p.name;
+    tr.appendChild(tdName);
+
+    // Kunde
+    const tdKunde = document.createElement('td');
+    tdKunde.textContent = p.kunde;
+    tr.appendChild(tdKunde);
+
+    // Type
+    const tdType = document.createElement('td');
+    tdType.textContent = p.type;
+    tr.appendChild(tdType);
+
+    // Lokasjon
+    const tdLok = document.createElement('td');
+    tdLok.textContent = p.lokasjon;
+    tr.appendChild(tdLok);
+
+    // Start
+    const tdStart = document.createElement('td');
+    tdStart.textContent = p.start;
+    tr.appendChild(tdStart);
+
+    // Frist
+    const tdFrist = document.createElement('td');
+    tdFrist.textContent = p.frist;
+    tr.appendChild(tdFrist);
+
+    // Progress
+    const tdProgress = document.createElement('td');
+    const pBar = document.createElement('div');
+    pBar.className = 'progress-bar';
+    const pFill = document.createElement('div');
+    pFill.className = 'progress-fill ' + p.progressColor;
+    pFill.style.width = p.progress + '%';
+    pBar.appendChild(pFill);
+    tdProgress.appendChild(pBar);
+    const pLabel = document.createElement('span');
+    pLabel.style.cssText = 'font-size:11px;color:var(--stone);';
+    pLabel.textContent = p.progress + '%';
+    tdProgress.appendChild(pLabel);
+    tr.appendChild(tdProgress);
+
+    // Status select
+    const tdStatus = document.createElement('td');
+    const sel = document.createElement('select');
+    sel.className = 'status-select ' + getStatusClass(p.status);
+    ['Aktiv','Planlagt','Fullført','Standby'].forEach(function(opt) {
+      const o = document.createElement('option');
+      o.value = opt;
+      o.textContent = opt;
+      if (opt === p.status) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.onchange = function(){ changeProjectStatus(idx, this.value); };
+    tdStatus.appendChild(sel);
+    tr.appendChild(tdStatus);
+
+    tbody.appendChild(tr);
+
+    // Detail row (hidden)
+    const detailTr = document.createElement('tr');
+    detailTr.className = 'project-detail-row';
+    detailTr.id = 'project-detail-' + idx;
+    detailTr.style.display = 'none';
+    const detailTd = document.createElement('td');
+    detailTd.setAttribute('colspan', '9');
+    buildDetailPanelDOM(detailTd, p.name, idx);
+    detailTr.appendChild(detailTd);
+    tbody.appendChild(detailTr);
+  });
+
+  renderArchive();
+}
+
+function buildDetailPanelDOM(container, projectName, idx) {
+  const d = getProjectData(projectName);
+  const panel = document.createElement('div');
+  panel.className = 'project-detail-panel';
+
+  const grid = document.createElement('div');
+  grid.className = 'project-detail-grid';
+
+  // Column 1: Vedlegg
+  const col1 = document.createElement('div');
+  col1.className = 'project-detail-section';
+  const h4_1 = document.createElement('h4');
+  h4_1.textContent = 'Vedlegg';
+  col1.appendChild(h4_1);
+
+  const uploadLabel = document.createElement('label');
+  uploadLabel.className = 'file-upload-btn';
+  uploadLabel.textContent = '\uD83D\uDCCE Last opp fil';
+  const uploadInput = document.createElement('input');
+  uploadInput.type = 'file';
+  uploadInput.style.display = 'none';
+  uploadInput.onchange = function(){ uploadAttachment(projectName, idx, this); };
+  uploadLabel.appendChild(uploadInput);
+  col1.appendChild(uploadLabel);
+
+  const attachList = document.createElement('div');
+  attachList.className = 'attachment-list';
+  if (d.attachments && d.attachments.length) {
+    d.attachments.forEach(function(a, ai) {
+      const item = document.createElement('div');
+      item.className = 'attachment-item';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'attachment-item-name';
+      nameSpan.textContent = a.name;
+      item.appendChild(nameSpan);
+      const actions = document.createElement('div');
+      actions.className = 'attachment-item-actions';
+      const dlBtn = document.createElement('button');
+      dlBtn.textContent = '\u2193';
+      dlBtn.title = 'Last ned';
+      dlBtn.onclick = function(){ downloadAttachment(projectName, ai); };
+      actions.appendChild(dlBtn);
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.textContent = '\u2715';
+      delBtn.title = 'Slett';
+      delBtn.onclick = function(){ deleteAttachment(projectName, ai, idx); };
+      actions.appendChild(delBtn);
+      item.appendChild(actions);
+      attachList.appendChild(item);
+    });
+  }
+  col1.appendChild(attachList);
+  grid.appendChild(col1);
+
+  // Column 2: Tilbud & PO
+  const col2 = document.createElement('div');
+  col2.className = 'project-detail-section';
+  const h4_2 = document.createElement('h4');
+  h4_2.textContent = 'Tilbud & PO';
+  col2.appendChild(h4_2);
+
+  // Tilbud checkbox
+  const cbRow1 = document.createElement('div');
+  cbRow1.className = 'checkbox-row';
+  const cb1 = document.createElement('input');
+  cb1.type = 'checkbox';
+  cb1.checked = d.tilbudMottatt;
+  cb1.onchange = function(){ toggleCheckbox(projectName, 'tilbudMottatt', this.checked, idx); };
+  cbRow1.appendChild(cb1);
+  const cbLabel1 = document.createElement('span');
+  cbLabel1.textContent = 'Tilbud mottatt';
+  cbRow1.appendChild(cbLabel1);
+  col2.appendChild(cbRow1);
+
+  const tilbudUpload = document.createElement('label');
+  tilbudUpload.className = 'file-upload-btn';
+  tilbudUpload.style.marginBottom = '8px';
+  tilbudUpload.textContent = '\uD83D\uDCC4 Last opp tilbud (PDF)';
+  const tilbudInput = document.createElement('input');
+  tilbudInput.type = 'file';
+  tilbudInput.accept = '.pdf';
+  tilbudInput.style.display = 'none';
+  tilbudInput.onchange = function(){ uploadPDFile(projectName, 'tilbud', idx, this); };
+  tilbudUpload.appendChild(tilbudInput);
+  col2.appendChild(tilbudUpload);
+
+  if (d.tilbudFile) {
+    const tItem = document.createElement('div');
+    tItem.className = 'attachment-item';
+    const tName = document.createElement('span');
+    tName.className = 'attachment-item-name';
+    tName.textContent = d.tilbudFile.name;
+    tItem.appendChild(tName);
+    const tActions = document.createElement('div');
+    tActions.className = 'attachment-item-actions';
+    const tDl = document.createElement('button');
+    tDl.textContent = '\u2193';
+    tDl.title = 'Last ned';
+    tDl.onclick = function(){ downloadPDFile(projectName, 'tilbud'); };
+    tActions.appendChild(tDl);
+    tItem.appendChild(tActions);
+    col2.appendChild(tItem);
+  }
+
+  // PO checkbox
+  const cbRow2 = document.createElement('div');
+  cbRow2.className = 'checkbox-row';
+  cbRow2.style.marginTop = '10px';
+  const cb2 = document.createElement('input');
+  cb2.type = 'checkbox';
+  cb2.checked = d.poMottatt;
+  cb2.onchange = function(){ toggleCheckbox(projectName, 'poMottatt', this.checked, idx); };
+  cbRow2.appendChild(cb2);
+  const cbLabel2 = document.createElement('span');
+  cbLabel2.textContent = 'PO mottatt';
+  cbRow2.appendChild(cbLabel2);
+  col2.appendChild(cbRow2);
+
+  const poUpload = document.createElement('label');
+  poUpload.className = 'file-upload-btn';
+  poUpload.textContent = '\uD83D\uDCC4 Last opp PO (PDF)';
+  const poInput = document.createElement('input');
+  poInput.type = 'file';
+  poInput.accept = '.pdf';
+  poInput.style.display = 'none';
+  poInput.onchange = function(){ uploadPDFile(projectName, 'po', idx, this); };
+  poUpload.appendChild(poInput);
+  col2.appendChild(poUpload);
+
+  if (d.poFile) {
+    const pItem = document.createElement('div');
+    pItem.className = 'attachment-item';
+    const pName = document.createElement('span');
+    pName.className = 'attachment-item-name';
+    pName.textContent = d.poFile.name;
+    pItem.appendChild(pName);
+    const pActions = document.createElement('div');
+    pActions.className = 'attachment-item-actions';
+    const pDl = document.createElement('button');
+    pDl.textContent = '\u2193';
+    pDl.title = 'Last ned';
+    pDl.onclick = function(){ downloadPDFile(projectName, 'po'); };
+    pActions.appendChild(pDl);
+    pItem.appendChild(pActions);
+    col2.appendChild(pItem);
+  }
+
+  grid.appendChild(col2);
+
+  // Column 3: Kundekontakt
+  const col3 = document.createElement('div');
+  col3.className = 'project-detail-section';
+  const h4_3 = document.createElement('h4');
+  h4_3.textContent = 'Kundekontakt';
+  col3.appendChild(h4_3);
+
+  const fg1 = document.createElement('div');
+  fg1.className = 'form-group';
+  const lbl1 = document.createElement('label');
+  lbl1.textContent = 'Kontaktperson';
+  fg1.appendChild(lbl1);
+  const inp1 = document.createElement('input');
+  inp1.type = 'text';
+  inp1.value = d.kontaktperson || '';
+  inp1.placeholder = 'Navn';
+  inp1.onchange = function(){ updateProjectField(projectName, 'kontaktperson', this.value); };
+  fg1.appendChild(inp1);
+  col3.appendChild(fg1);
+
+  const fg2 = document.createElement('div');
+  fg2.className = 'form-group';
+  const lbl2 = document.createElement('label');
+  lbl2.textContent = 'E-post';
+  fg2.appendChild(lbl2);
+  const inp2 = document.createElement('input');
+  inp2.type = 'email';
+  inp2.value = d.epost || '';
+  inp2.placeholder = 'E-postadresse';
+  inp2.onchange = function(){ updateProjectField(projectName, 'epost', this.value); };
+  fg2.appendChild(inp2);
+  col3.appendChild(fg2);
+
+  grid.appendChild(col3);
+  panel.appendChild(grid);
+
+  // Notes
+  const notesFg = document.createElement('div');
+  notesFg.className = 'form-group';
+  const notesLbl = document.createElement('label');
+  notesLbl.textContent = 'Notater';
+  notesFg.appendChild(notesLbl);
+  const notesTa = document.createElement('textarea');
+  notesTa.rows = 3;
+  notesTa.placeholder = 'Prosjektnotater...';
+  notesTa.textContent = d.notater || '';
+  notesTa.onchange = function(){ updateProjectField(projectName, 'notater', this.value); };
+  notesFg.appendChild(notesTa);
+  panel.appendChild(notesFg);
+
+  while (container.firstChild) container.removeChild(container.firstChild);
+  container.appendChild(panel);
+}
+
+function toggleProjectDetail(idx) {
+  const row = document.getElementById('project-detail-' + idx);
+  const toggle = document.querySelector('[data-project-idx="' + idx + '"] .project-toggle');
+  if (row.style.display === 'none') {
+    row.style.display = '';
+    toggle.textContent = '\u25BC';
+  } else {
+    row.style.display = 'none';
+    toggle.textContent = '\u25B6';
+  }
+}
+
+function changeProjectStatus(idx, newStatus) {
+  const projects = getProjects();
+  projects[idx].status = newStatus;
+  if (newStatus === 'Fullført') {
+    projects[idx].completedDate = new Date().toLocaleDateString('no-NO');
+  }
+  saveProjects(projects);
+  renderProjects();
+}
+
+function uploadAttachment(projectName, idx, input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('Maks filstørrelse er 5MB'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const d = getProjectData(projectName);
+    d.attachments.push({ name: file.name, data: e.target.result, type: file.type });
+    saveProjectData(projectName, d);
+    refreshDetailPanel(projectName, idx);
+  };
+  reader.readAsDataURL(file);
+}
+
+function downloadAttachment(projectName, attachIdx) {
+  const d = getProjectData(projectName);
+  const a = d.attachments[attachIdx];
+  const link = document.createElement('a');
+  link.href = a.data;
+  link.download = a.name;
+  link.click();
+}
+
+function deleteAttachment(projectName, attachIdx, idx) {
+  const d = getProjectData(projectName);
+  d.attachments.splice(attachIdx, 1);
+  saveProjectData(projectName, d);
+  refreshDetailPanel(projectName, idx);
+}
+
+function uploadPDFile(projectName, type, idx, input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('Maks filstørrelse er 5MB'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const d = getProjectData(projectName);
+    const key = type === 'tilbud' ? 'tilbudFile' : 'poFile';
+    d[key] = { name: file.name, data: e.target.result };
+    saveProjectData(projectName, d);
+    refreshDetailPanel(projectName, idx);
+  };
+  reader.readAsDataURL(file);
+}
+
+function downloadPDFile(projectName, type) {
+  const d = getProjectData(projectName);
+  const f = type === 'tilbud' ? d.tilbudFile : d.poFile;
+  if (!f) return;
+  const link = document.createElement('a');
+  link.href = f.data;
+  link.download = f.name;
+  link.click();
+}
+
+function toggleCheckbox(projectName, field, checked, idx) {
+  const d = getProjectData(projectName);
+  d[field] = checked;
+  saveProjectData(projectName, d);
+}
+
+function updateProjectField(projectName, field, value) {
+  const d = getProjectData(projectName);
+  d[field] = value;
+  saveProjectData(projectName, d);
+}
+
+function refreshDetailPanel(projectName, idx) {
+  const detailRow = document.getElementById('project-detail-' + idx);
+  if (detailRow) {
+    buildDetailPanelDOM(detailRow.querySelector('td'), projectName, idx);
+  }
+}
+
+/* ============== ARKIV ============== */
+function renderArchive() {
+  const projects = getProjects();
+  const tbody = document.getElementById('archiveTableBody');
+  while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+  let hasArchived = false;
+
+  projects.forEach(function(p, idx) {
+    if (p.status !== 'Fullført') return;
+    hasArchived = true;
+    const tr = document.createElement('tr');
+
+    const tdName = document.createElement('td');
+    tdName.style.fontWeight = '600';
+    tdName.textContent = p.name;
+    tr.appendChild(tdName);
+
+    const tdKunde = document.createElement('td');
+    tdKunde.textContent = p.kunde;
+    tr.appendChild(tdKunde);
+
+    const tdType = document.createElement('td');
+    tdType.textContent = p.type;
+    tr.appendChild(tdType);
+
+    const tdLok = document.createElement('td');
+    tdLok.textContent = p.lokasjon;
+    tr.appendChild(tdLok);
+
+    const tdDate = document.createElement('td');
+    tdDate.textContent = p.completedDate || p.frist;
+    tr.appendChild(tdDate);
+
+    const tdAction = document.createElement('td');
+    const restoreBtn = document.createElement('button');
+    restoreBtn.className = 'btn btn-secondary';
+    restoreBtn.textContent = 'Gjenopprett';
+    restoreBtn.onclick = function(){ restoreProject(idx); };
+    tdAction.appendChild(restoreBtn);
+    tr.appendChild(tdAction);
+
+    tbody.appendChild(tr);
+  });
+
+  if (!hasArchived) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.setAttribute('colspan', '6');
+    td.style.cssText = 'text-align:center;color:var(--stone);padding:24px;';
+    td.textContent = 'Ingen fullførte prosjekter i arkivet';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+}
+
+function restoreProject(idx) {
+  const projects = getProjects();
+  projects[idx].status = 'Aktiv';
+  delete projects[idx].completedDate;
+  saveProjects(projects);
+  renderProjects();
+}
+
+/* ============== GJØREMÅL ============== */
+function getTodos() {
+  const stored = localStorage.getItem('omt_todos');
+  return stored ? JSON.parse(stored) : [];
+}
+function saveTodos(todos) {
+  localStorage.setItem('omt_todos', JSON.stringify(todos));
+}
+
+let currentTodoFilter = 'alle';
+
+function toggleTodoForm() {
+  document.getElementById('todoForm').classList.toggle('active');
+}
+
+function addTodo() {
+  const title = document.getElementById('todoTitle').value.trim();
+  if (!title) { alert('Tittel er påkrevd'); return; }
+  const todos = getTodos();
+  todos.push({
+    id: Date.now(),
+    title: title,
+    desc: document.getElementById('todoDesc').value.trim(),
+    priority: document.getElementById('todoPriority').value,
+    due: document.getElementById('todoDue').value,
+    completed: false,
+    createdAt: new Date().toISOString()
+  });
+  saveTodos(todos);
+  document.getElementById('todoTitle').value = '';
+  document.getElementById('todoDesc').value = '';
+  document.getElementById('todoPriority').value = 'Medium';
+  document.getElementById('todoDue').value = '';
+  document.getElementById('todoForm').classList.remove('active');
+  renderTodos();
+}
+
+function toggleTodoComplete(id) {
+  const todos = getTodos();
+  const todo = todos.find(function(t){ return t.id === id; });
+  if (todo) todo.completed = !todo.completed;
+  saveTodos(todos);
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  let todos = getTodos();
+  todos = todos.filter(function(t){ return t.id !== id; });
+  saveTodos(todos);
+  renderTodos();
+}
+
+function filterTodos(filter) {
+  currentTodoFilter = filter;
+  document.querySelectorAll('.todo-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  event.target.classList.add('active');
+  renderTodos();
+}
+
+function renderTodos() {
+  const todos = getTodos();
+  const container = document.getElementById('todoList');
+  while (container.firstChild) container.removeChild(container.firstChild);
+
+  let filtered = todos;
+  if (currentTodoFilter === 'aktive') filtered = todos.filter(function(t){ return !t.completed; });
+  if (currentTodoFilter === 'fullforte') filtered = todos.filter(function(t){ return t.completed; });
+
+  if (filtered.length === 0) {
+    const emptyDiv = document.createElement('div');
+    emptyDiv.style.cssText = 'text-align:center;padding:40px;color:var(--stone);font-size:14px;';
+    emptyDiv.textContent = 'Ingen gjøremål' + (currentTodoFilter !== 'alle' ? ' i denne kategorien' : '');
+    container.appendChild(emptyDiv);
+    return;
+  }
+
+  filtered.forEach(function(t) {
+    const priorityClass = t.priority === 'Høy' ? 'badge-critical' : t.priority === 'Medium' ? 'badge-pending' : 'badge-completed';
+    const dueStr = t.due ? new Date(t.due).toLocaleDateString('no-NO') : '';
+
+    const card = document.createElement('div');
+    card.className = 'todo-card' + (t.completed ? ' completed' : '');
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.className = 'todo-checkbox';
+    cb.checked = t.completed;
+    cb.onchange = function(){ toggleTodoComplete(t.id); };
+    card.appendChild(cb);
+
+    const content = document.createElement('div');
+    content.className = 'todo-content';
+
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'todo-title';
+    titleDiv.textContent = t.title;
+    content.appendChild(titleDiv);
+
+    if (t.desc) {
+      const descDiv = document.createElement('div');
+      descDiv.className = 'todo-desc';
+      descDiv.textContent = t.desc;
+      content.appendChild(descDiv);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'todo-meta';
+    const badge = document.createElement('span');
+    badge.className = 'badge ' + priorityClass;
+    badge.textContent = t.priority;
+    meta.appendChild(badge);
+    if (dueStr) {
+      const dueSpan = document.createElement('span');
+      dueSpan.className = 'todo-due';
+      dueSpan.textContent = 'Frist: ' + dueStr;
+      meta.appendChild(dueSpan);
+    }
+    content.appendChild(meta);
+    card.appendChild(content);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'todo-delete';
+    delBtn.title = 'Slett';
+    delBtn.textContent = '\u2715';
+    delBtn.onclick = function(){ deleteTodo(t.id); };
+    card.appendChild(delBtn);
+
+    container.appendChild(card);
+  });
+}
+
+/* ============== RETTSKRIVING ============== */
+function doRettskriving() {
+  const input = document.getElementById('rettskrivingInput').value.trim();
+  if (!input) { alert('Lim inn tekst først'); return; }
+  document.getElementById('rettskrivingOutput').classList.remove('active');
+  document.getElementById('rettskrivingLoading').classList.add('active');
+
+  setTimeout(function() {
+    document.getElementById('rettskrivingLoading').classList.remove('active');
+    document.getElementById('rettskrivingResult').textContent = input;
+    document.getElementById('rettskrivingOutput').classList.add('active');
+  }, 1500);
+}
+
+function copyRettskriving() {
+  const text = document.getElementById('rettskrivingResult').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    const btn = document.querySelector('#rettskrivingOutput .btn');
+    const origHTML = btn.textContent;
+    btn.textContent = '\u2713 Kopiert!';
+    setTimeout(function(){ btn.textContent = origHTML; }, 2000);
+  });
+}
+
+/* ============== CORE FUNCTIONS ============== */
+function selectRole(el, role) {
+  document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedRole = role;
+}
+
+function doLogin() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('argonBadge').style.display = 'flex';
+  if (selectedRole) {
+    document.getElementById('userRole').textContent = selectedRole;
+    const names = { 'Administrator': ['Asle Aase','AA'], 'Prosjektleder': ['Jone Midbøe','JM'], 'Tekniker': ['Erik Larsen','EL'] };
+    const n = names[selectedRole] || names['Administrator'];
+    document.getElementById('userName').textContent = n[0];
+    document.getElementById('userAvatar').textContent = n[1];
+  }
+  renderProjects();
+  renderTodos();
+}
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const links = document.querySelectorAll('.nav-link');
+  const map = { 'oversikt':0, 'prosjekter':1, 'gjoremal':2, 'teknikere':3, 'fartoy':4, 'hms':5, 'arkiv':6, 'rettskriving':7, 'innstillinger':8 };
+  if (map[pageId] !== undefined) links[map[pageId]].classList.add('active');
+  if (pageId === 'prosjekter') renderProjects();
+  if (pageId === 'arkiv') renderArchive();
+  if (pageId === 'gjoremal') renderTodos();
+  // Close sidebar on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+}
+
+function openModal(type) {
+  document.getElementById('modal-' + type).classList.add('active');
+}
+
+function closeModal(type) {
+  document.getElementById('modal-' + type).classList.remove('active');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
+  });
+});
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  renderProjects();
+  renderTodos();
+});
+</script>
+</body>
+</html>
