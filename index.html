@@ -927,19 +927,20 @@ tr:hover td { background: rgba(11,77,140,0.02); }
 .file-upload-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 5px 10px;
-  background: var(--warm-sand);
-  border: 1px solid var(--ring-warm);
-  border-radius: 5px;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--ivory);
+  border: 1px solid var(--border-warm);
+  border-radius: var(--radius);
   font-family: var(--font);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--charcoal);
   cursor: pointer;
   transition: all 0.15s;
 }
-.file-upload-btn:hover { background: var(--ring-warm); }
+.file-upload-btn:hover { background: var(--warm-sand); border-color: var(--ring-warm); }
+.file-upload-btn svg { width: 14px; height: 14px; stroke: var(--stone); flex-shrink: 0; }
 .checkbox-row {
   display: flex;
   align-items: center;
@@ -981,6 +982,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
 .status-select.status-planlagt { background-color: rgba(196,132,29,0.08); color: var(--warning); border-color: rgba(196,132,29,0.25); }
 .status-select.status-fullfort { background-color: rgba(11,77,140,0.08); color: var(--primary); border-color: rgba(11,77,140,0.25); }
 .status-select.status-standby { background-color: rgba(94,93,89,0.08); color: var(--olive); border-color: rgba(94,93,89,0.25); }
+.status-select.status-fakturering { background-color: rgba(139,92,196,0.08); color: #7c3aed; border-color: rgba(139,92,196,0.25); }
 
 /* ============== GJOREMAL (TODO) ============== */
 .todo-filters {
@@ -2139,7 +2141,7 @@ function saveProjectData(projectName, data) {
 }
 
 function getStatusClass(status) {
-  const map = { 'Aktiv':'status-aktiv', 'Planlagt':'status-planlagt', 'Fullført':'status-fullfort', 'Standby':'status-standby' };
+  const map = { 'Aktiv':'status-aktiv', 'Planlagt':'status-planlagt', 'Fakturering':'status-fakturering', 'Fullført':'status-fullfort', 'Standby':'status-standby' };
   return map[status] || '';
 }
 
@@ -2217,7 +2219,7 @@ function renderProjects() {
     const tdStatus = document.createElement('td');
     const sel = document.createElement('select');
     sel.className = 'status-select ' + getStatusClass(p.status);
-    ['Aktiv','Planlagt','Fullført','Standby'].forEach(function(opt) {
+    ['Aktiv','Planlagt','Fakturering','Fullført','Standby'].forEach(function(opt) {
       const o = document.createElement('option');
       o.value = opt;
       o.textContent = opt;
@@ -2262,7 +2264,22 @@ function buildDetailPanelDOM(container, projectName, idx) {
 
   const uploadLabel = document.createElement('label');
   uploadLabel.className = 'file-upload-btn';
-  uploadLabel.textContent = '\uD83D\uDCCE Last opp fil';
+  const uploadIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  uploadIcon.setAttribute('viewBox', '0 0 24 24');
+  uploadIcon.setAttribute('fill', 'none');
+  uploadIcon.setAttribute('stroke', 'currentColor');
+  uploadIcon.setAttribute('stroke-width', '2');
+  uploadIcon.setAttribute('stroke-linecap', 'round');
+  uploadIcon.setAttribute('stroke-linejoin', 'round');
+  const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p1.setAttribute('d', 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4');
+  const p2 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  p2.setAttribute('points', '17 8 12 3 7 8');
+  const p3 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  p3.setAttribute('x1', '12'); p3.setAttribute('y1', '3'); p3.setAttribute('x2', '12'); p3.setAttribute('y2', '15');
+  uploadIcon.appendChild(p1); uploadIcon.appendChild(p2); uploadIcon.appendChild(p3);
+  uploadLabel.appendChild(uploadIcon);
+  uploadLabel.appendChild(document.createTextNode(' Last opp fil'));
   const uploadInput = document.createElement('input');
   uploadInput.type = 'file';
   uploadInput.style.display = 'none';
@@ -2316,14 +2333,27 @@ function buildDetailPanelDOM(container, projectName, idx) {
   cb1.onchange = function(){ toggleCheckbox(projectName, 'tilbudMottatt', this.checked, idx); };
   cbRow1.appendChild(cb1);
   const cbLabel1 = document.createElement('span');
-  cbLabel1.textContent = 'Tilbud mottatt';
+  cbLabel1.textContent = 'Tilbud sendt';
   cbRow1.appendChild(cbLabel1);
   col2.appendChild(cbRow1);
 
   const tilbudUpload = document.createElement('label');
   tilbudUpload.className = 'file-upload-btn';
   tilbudUpload.style.marginBottom = '8px';
-  tilbudUpload.textContent = '\uD83D\uDCC4 Last opp tilbud (PDF)';
+  const tilbudIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  tilbudIcon.setAttribute('viewBox', '0 0 24 24');
+  tilbudIcon.setAttribute('fill', 'none');
+  tilbudIcon.setAttribute('stroke', 'currentColor');
+  tilbudIcon.setAttribute('stroke-width', '2');
+  tilbudIcon.setAttribute('stroke-linecap', 'round');
+  tilbudIcon.setAttribute('stroke-linejoin', 'round');
+  const ti1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  ti1.setAttribute('d', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z');
+  const ti2 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  ti2.setAttribute('points', '14 2 14 8 20 8');
+  tilbudIcon.appendChild(ti1); tilbudIcon.appendChild(ti2);
+  tilbudUpload.appendChild(tilbudIcon);
+  tilbudUpload.appendChild(document.createTextNode(' Last opp tilbud (PDF)'));
   const tilbudInput = document.createElement('input');
   tilbudInput.type = 'file';
   tilbudInput.accept = '.pdf';
@@ -2366,7 +2396,20 @@ function buildDetailPanelDOM(container, projectName, idx) {
 
   const poUpload = document.createElement('label');
   poUpload.className = 'file-upload-btn';
-  poUpload.textContent = '\uD83D\uDCC4 Last opp PO (PDF)';
+  const poIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  poIcon.setAttribute('viewBox', '0 0 24 24');
+  poIcon.setAttribute('fill', 'none');
+  poIcon.setAttribute('stroke', 'currentColor');
+  poIcon.setAttribute('stroke-width', '2');
+  poIcon.setAttribute('stroke-linecap', 'round');
+  poIcon.setAttribute('stroke-linejoin', 'round');
+  const poi1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  poi1.setAttribute('d', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z');
+  const poi2 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  poi2.setAttribute('points', '14 2 14 8 20 8');
+  poIcon.appendChild(poi1); poIcon.appendChild(poi2);
+  poUpload.appendChild(poIcon);
+  poUpload.appendChild(document.createTextNode(' Last opp PO (PDF)'));
   const poInput = document.createElement('input');
   poInput.type = 'file';
   poInput.accept = '.pdf';
