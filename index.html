@@ -824,24 +824,165 @@ tr:hover td { background: rgba(11,77,140,0.02); }
   .sidebar.open { transform: translateX(0); }
   .sidebar-overlay.open { display: block; }
   .main { margin-left: 0; }
-  .page-header { padding: 70px 20px 0; }
-  .page-content { padding: 20px; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-header { padding: 70px 16px 0; }
+  .page-content { padding: 16px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .tech-grid { grid-template-columns: 1fr; }
   .hms-summary { grid-template-columns: 1fr; }
   .vessel-stats { grid-template-columns: repeat(2, 1fr); }
   .form-row { grid-template-columns: 1fr; }
-  .table-wrap { margin: 0 -20px; }
-  table { min-width: 600px; }
   .login-right { display: none; }
   .login-left { padding: 24px; }
   .card-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .overview-bottom-grid { grid-template-columns: 1fr !important; }
+
+  /* Mobile: convert tables to card layout */
+  .table-wrap { margin: 0; overflow-x: visible; }
+  table { min-width: 0; }
+
+  .mobile-cards thead { display: none; }
+  .mobile-cards tbody tr {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-cream);
+    gap: 6px;
+  }
+  .mobile-cards tbody tr:last-child { border-bottom: none; }
+  .mobile-cards tbody td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    border: none;
+    font-size: 13px;
+  }
+  .mobile-cards tbody td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--stone);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+  .mobile-cards tbody td:first-child {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--near-black);
+  }
+  .mobile-cards tbody td:first-child::before { display: none; }
+
+  /* Project table mobile: hide less important columns */
+  #projectTable thead { display: none; }
+  #projectTable tbody > tr:not(.project-detail-row) {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-cream);
+    gap: 4px 12px;
+    align-items: center;
+  }
+  #projectTable tbody > tr:not(.project-detail-row) td {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    border: none;
+  }
+  /* Toggle chevron */
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(1) {
+    order: 0;
+    width: 24px;
+  }
+  /* Project name - full width after chevron */
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(2) {
+    order: 1;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--near-black);
+    flex: 1;
+    min-width: 0;
+  }
+  /* Status dropdown */
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(9) {
+    order: 2;
+  }
+  /* Client */
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(3) {
+    order: 3;
+    font-size: 12px;
+    color: var(--charcoal);
+    width: 100%;
+    padding-left: 36px;
+  }
+  /* Hide Type, Lokasjon, Start, Frist on mobile */
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(4),
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(5),
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(6),
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(7) {
+    display: none;
+  }
+  /* Progress */
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(8) {
+    order: 4;
+    width: 100%;
+    padding-left: 36px;
+    padding-top: 4px;
+  }
+
+  /* Detail row full width */
+  #projectTable tbody > tr.project-detail-row {
+    display: table-row;
+  }
+  #projectTable tbody > tr.project-detail-row td {
+    display: table-cell;
+    padding: 0 !important;
+  }
+  .project-detail-panel { padding: 16px; }
+
+  /* Archive table mobile */
+  #archiveTable thead { display: none; }
+  #archiveTable tbody tr {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-cream);
+    gap: 6px;
+  }
+  #archiveTable tbody td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    border: none;
+    font-size: 13px;
+  }
+  #archiveTable tbody td:first-child {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--near-black);
+  }
+
+  /* Todo cards */
+  .todo-card { padding: 12px 14px; gap: 10px; }
+  .todo-title { font-size: 13px; }
+
+  /* Rettskriving */
+  .rettskriving-result-header { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
 
 @media (max-width: 480px) {
   .kpi-grid { grid-template-columns: 1fr; }
+  .kpi-card { padding: 14px; }
   .vessel-stats { grid-template-columns: 1fr; }
   .page-header h1 { font-size: 18px; }
+  .page-header p { font-size: 13px; }
+  .btn { font-size: 12px; padding: 7px 12px; }
+  .role-card { padding: 14px; }
+  .tech-card { padding: 14px; }
+  .vessel-hero { padding: 24px 16px; }
+  .vessel-hero h2 { font-size: 20px; }
 }
 
 /* ============== EXPANDABLE PROJECT ROWS ============== */
@@ -1336,7 +1477,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
             </a>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="mobile-cards">
               <thead>
                 <tr>
                   <th>Prosjekt</th>
@@ -1350,50 +1491,50 @@ tr:hover td { background: rgba(11,77,140,0.02); }
               <tbody>
                 <tr>
                   <td style="font-weight:600;">Helideck oppgradering</td>
-                  <td>Equinor ASA</td>
-                  <td>Elektroinstallasjon</td>
-                  <td>Gullfaks B</td>
-                  <td><div class="progress-bar"><div class="progress-fill blue" style="width:72%"></div></div><span style="font-size:11px;color:var(--stone);">72%</span></td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                  <td data-label="Kunde">Equinor ASA</td>
+                  <td data-label="Type">Elektroinstallasjon</td>
+                  <td data-label="Lokasjon">Gullfaks B</td>
+                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill blue" style="width:72%"></div></div><span style="font-size:11px;color:var(--stone);">72%</span></td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">SCR-system installasjon</td>
-                  <td>Solstad Offshore</td>
-                  <td>Utslippsreduksjon</td>
-                  <td>Normand Clipper</td>
-                  <td><div class="progress-bar"><div class="progress-fill green" style="width:95%"></div></div><span style="font-size:11px;color:var(--stone);">95%</span></td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                  <td data-label="Kunde">Solstad Offshore</td>
+                  <td data-label="Type">Utslippsreduksjon</td>
+                  <td data-label="Lokasjon">Normand Clipper</td>
+                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill green" style="width:95%"></div></div><span style="font-size:11px;color:var(--stone);">95%</span></td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">VFD-oppgradering pumpesystem</td>
-                  <td>Aker BP</td>
-                  <td>Energioptimalisering</td>
-                  <td>Ivar Aasen</td>
-                  <td><div class="progress-bar"><div class="progress-fill blue" style="width:45%"></div></div><span style="font-size:11px;color:var(--stone);">45%</span></td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                  <td data-label="Kunde">Aker BP</td>
+                  <td data-label="Type">Energioptimalisering</td>
+                  <td data-label="Lokasjon">Ivar Aasen</td>
+                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill blue" style="width:45%"></div></div><span style="font-size:11px;color:var(--stone);">45%</span></td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">Winterization — maskinrom</td>
-                  <td>DOF Subsea</td>
-                  <td>Winterization</td>
-                  <td>Skandi Neptune</td>
-                  <td><div class="progress-bar"><div class="progress-fill orange" style="width:30%"></div></div><span style="font-size:11px;color:var(--stone);">30%</span></td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
+                  <td data-label="Kunde">DOF Subsea</td>
+                  <td data-label="Type">Winterization</td>
+                  <td data-label="Lokasjon">Skandi Neptune</td>
+                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill orange" style="width:30%"></div></div><span style="font-size:11px;color:var(--stone);">30%</span></td>
+                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">Schneider EcoStruxure integrasjon</td>
-                  <td>ConocoPhillips</td>
-                  <td>Automasjon</td>
-                  <td>Ekofisk</td>
-                  <td><div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div><span style="font-size:11px;color:var(--stone);">60%</span></td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
+                  <td data-label="Kunde">ConocoPhillips</td>
+                  <td data-label="Type">Automasjon</td>
+                  <td data-label="Lokasjon">Ekofisk</td>
+                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div><span style="font-size:11px;color:var(--stone);">60%</span></td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="overview-bottom-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
           <div class="card">
             <div class="card-header"><h2>Fartøystatus — MS OMT</h2></div>
             <div style="padding:20px;">
@@ -1624,7 +1765,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
             <h2>Kommende oppdrag</h2>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="mobile-cards">
               <thead>
                 <tr>
                   <th>Oppdrag</th>
@@ -1638,27 +1779,27 @@ tr:hover td { background: rgba(11,77,140,0.02); }
               <tbody>
                 <tr>
                   <td style="font-weight:600;">Kabellegging og terminering</td>
-                  <td>Equinor ASA</td>
-                  <td>Gullfaks B</td>
-                  <td>22.04.2026</td>
-                  <td>5 dager</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
+                  <td data-label="Kunde">Equinor ASA</td>
+                  <td data-label="Lokasjon">Gullfaks B</td>
+                  <td data-label="Dato">22.04.2026</td>
+                  <td data-label="Varighet">5 dager</td>
+                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">Generatorservice</td>
-                  <td>Eidesvik Offshore</td>
-                  <td>Viking Energy — kai</td>
-                  <td>28.04.2026</td>
-                  <td>2 dager</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
+                  <td data-label="Kunde">Eidesvik Offshore</td>
+                  <td data-label="Lokasjon">Viking Energy — kai</td>
+                  <td data-label="Dato">28.04.2026</td>
+                  <td data-label="Varighet">2 dager</td>
+                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">Navigasjonslys inspeksjon</td>
-                  <td>Solstad Offshore</td>
-                  <td>Normand Vision — offshore</td>
-                  <td>05.05.2026</td>
-                  <td>3 dager</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Tilbud sendt</span></td>
+                  <td data-label="Kunde">Solstad Offshore</td>
+                  <td data-label="Lokasjon">Normand Vision — offshore</td>
+                  <td data-label="Dato">05.05.2026</td>
+                  <td data-label="Varighet">3 dager</td>
+                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Tilbud sendt</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1668,7 +1809,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
         <div class="card">
           <div class="card-header"><h2>Vedlikeholdslogg</h2></div>
           <div class="table-wrap">
-            <table>
+            <table class="mobile-cards">
               <thead>
                 <tr>
                   <th>Dato</th>
@@ -1680,25 +1821,25 @@ tr:hover td { background: rgba(11,77,140,0.02); }
               </thead>
               <tbody>
                 <tr>
-                  <td>15.04.2026</td>
-                  <td>Periodisk</td>
-                  <td>500-timers motorservice</td>
-                  <td>Ole Johannessen</td>
-                  <td><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
+                  <td style="font-weight:600;">15.04.2026</td>
+                  <td data-label="Type">Periodisk</td>
+                  <td data-label="Beskrivelse">500-timers motorservice</td>
+                  <td data-label="Utført av">Ole Johannessen</td>
+                  <td data-label="Status"><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
                 </tr>
                 <tr>
-                  <td>02.04.2026</td>
-                  <td>Inspeksjon</td>
-                  <td>Årlig sjøfartsdirektorat-inspeksjon</td>
-                  <td>Ekstern</td>
-                  <td><span class="badge badge-completed"><span class="badge-dot"></span>Godkjent</span></td>
+                  <td style="font-weight:600;">02.04.2026</td>
+                  <td data-label="Type">Inspeksjon</td>
+                  <td data-label="Beskrivelse">Årlig sjøfartsdirektorat-inspeksjon</td>
+                  <td data-label="Utført av">Ekstern</td>
+                  <td data-label="Status"><span class="badge badge-completed"><span class="badge-dot"></span>Godkjent</span></td>
                 </tr>
                 <tr>
-                  <td>20.03.2026</td>
-                  <td>Korrektiv</td>
-                  <td>Bytte av hydraulikkslange — dekskran</td>
-                  <td>Ole Johannessen</td>
-                  <td><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
+                  <td style="font-weight:600;">20.03.2026</td>
+                  <td data-label="Type">Korrektiv</td>
+                  <td data-label="Beskrivelse">Bytte av hydraulikkslange — dekskran</td>
+                  <td data-label="Utført av">Ole Johannessen</td>
+                  <td data-label="Status"><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1738,7 +1879,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
             </button>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="mobile-cards">
               <thead>
                 <tr>
                   <th>#</th>
@@ -1752,40 +1893,36 @@ tr:hover td { background: rgba(11,77,140,0.02); }
               </thead>
               <tbody>
                 <tr>
-                  <td style="font-weight:600;">#47</td>
-                  <td>Manglende sikkerhetsskilting i E-rom</td>
-                  <td>Gullfaks B</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Medium</span></td>
-                  <td>15.04.2026</td>
-                  <td>Ingunn Søiland</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Under behandling</span></td>
+                  <td style="font-weight:600;">#47 — Manglende sikkerhetsskilting i E-rom</td>
+                  <td data-label="Lokasjon">Gullfaks B</td>
+                  <td data-label="Alvorlighet"><span class="badge badge-pending"><span class="badge-dot"></span>Medium</span></td>
+                  <td data-label="Rapportert">15.04.2026</td>
+                  <td data-label="Ansvarlig">Ingunn Søiland</td>
+                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Under behandling</span></td>
                 </tr>
                 <tr>
-                  <td style="font-weight:600;">#46</td>
-                  <td>Utgått brannslukker i verksted</td>
-                  <td>Stavanger kontor</td>
-                  <td><span class="badge badge-critical"><span class="badge-dot"></span>Høy</span></td>
-                  <td>12.04.2026</td>
-                  <td>Ingunn Søiland</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Bestilt erstatning</span></td>
+                  <td style="font-weight:600;">#46 — Utgått brannslukker i verksted</td>
+                  <td data-label="Lokasjon">Stavanger kontor</td>
+                  <td data-label="Alvorlighet"><span class="badge badge-critical"><span class="badge-dot"></span>Høy</span></td>
+                  <td data-label="Rapportert">12.04.2026</td>
+                  <td data-label="Ansvarlig">Ingunn Søiland</td>
+                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Bestilt erstatning</span></td>
                 </tr>
                 <tr>
-                  <td style="font-weight:600;">#45</td>
-                  <td>Glatt dekk ved lasteområde</td>
-                  <td>MS OMT</td>
-                  <td><span class="badge badge-pending"><span class="badge-dot"></span>Medium</span></td>
-                  <td>08.04.2026</td>
-                  <td>Håvard Seljeskog</td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Lukket</span></td>
+                  <td style="font-weight:600;">#45 — Glatt dekk ved lasteområde</td>
+                  <td data-label="Lokasjon">MS OMT</td>
+                  <td data-label="Alvorlighet"><span class="badge badge-pending"><span class="badge-dot"></span>Medium</span></td>
+                  <td data-label="Rapportert">08.04.2026</td>
+                  <td data-label="Ansvarlig">Håvard Seljeskog</td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Lukket</span></td>
                 </tr>
                 <tr>
-                  <td style="font-weight:600;">#44</td>
-                  <td>Manglende verneutstyr — høyspentrom</td>
-                  <td>Normand Clipper</td>
-                  <td><span class="badge badge-critical"><span class="badge-dot"></span>Høy</span></td>
-                  <td>03.04.2026</td>
-                  <td>Ingunn Søiland</td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Lukket</span></td>
+                  <td style="font-weight:600;">#44 — Manglende verneutstyr — høyspentrom</td>
+                  <td data-label="Lokasjon">Normand Clipper</td>
+                  <td data-label="Alvorlighet"><span class="badge badge-critical"><span class="badge-dot"></span>Høy</span></td>
+                  <td data-label="Rapportert">03.04.2026</td>
+                  <td data-label="Ansvarlig">Ingunn Søiland</td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Lukket</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1795,7 +1932,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
         <div class="card">
           <div class="card-header"><h2>Sertifiseringsstatus</h2></div>
           <div class="table-wrap">
-            <table>
+            <table class="mobile-cards">
               <thead>
                 <tr>
                   <th>Sertifisering</th>
@@ -1807,21 +1944,21 @@ tr:hover td { background: rgba(11,77,140,0.02); }
               <tbody>
                 <tr>
                   <td style="font-weight:600;">ISO 9001:2015</td>
-                  <td>DNV</td>
-                  <td>15.02.2029</td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
+                  <td data-label="Utsteder">DNV</td>
+                  <td data-label="Gyldig til">15.02.2029</td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">Schneider EcoXpert Power Service</td>
-                  <td>Schneider Electric</td>
-                  <td>01.11.2027</td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
+                  <td data-label="Utsteder">Schneider Electric</td>
+                  <td data-label="Gyldig til">01.11.2027</td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight:600;">Sentral godkjenning — Elektro</td>
-                  <td>Direktoratet for byggkvalitet</td>
-                  <td>01.09.2027</td>
-                  <td><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
+                  <td data-label="Utsteder">Direktoratet for byggkvalitet</td>
+                  <td data-label="Gyldig til">01.09.2027</td>
+                  <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Gyldig</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1938,7 +2075,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
             <h2>Fullførte prosjekter</h2>
           </div>
           <div class="table-wrap">
-            <table>
+            <table id="archiveTable">
               <thead>
                 <tr>
                   <th>Prosjekt</th>
