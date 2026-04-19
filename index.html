@@ -904,7 +904,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
     min-width: 0;
   }
   /* Status dropdown */
-  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(9) {
+  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(8) {
     order: 2;
   }
   /* Client */
@@ -921,13 +921,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
   #projectTable tbody > tr:not(.project-detail-row) td:nth-child(6),
   #projectTable tbody > tr:not(.project-detail-row) td:nth-child(7) {
     display: none;
-  }
-  /* Progress */
-  #projectTable tbody > tr:not(.project-detail-row) td:nth-child(8) {
-    order: 4;
-    width: 100%;
-    padding-left: 36px;
-    padding-top: 4px;
   }
 
   /* Detail row full width */
@@ -985,6 +978,19 @@ tr:hover td { background: rgba(11,77,140,0.02); }
 }
 
 /* ============== EXPANDABLE PROJECT ROWS ============== */
+.editable-cell { cursor: pointer; }
+.editable-cell:hover { background: var(--primary-faint); border-radius: 4px; }
+.inline-edit {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  font-family: var(--font);
+  font-size: 13px;
+  outline: none;
+  background: var(--white);
+  box-shadow: 0 0 0 2px var(--primary-faint);
+}
 .project-toggle {
   cursor: pointer;
   user-select: none;
@@ -1421,7 +1427,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <th>Kunde</th>
                   <th>Type</th>
                   <th>Lokasjon</th>
-                  <th>Fremdrift</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -1431,7 +1436,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <td data-label="Kunde">Equinor ASA</td>
                   <td data-label="Type">Elektroinstallasjon</td>
                   <td data-label="Lokasjon">Gullfaks B</td>
-                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill blue" style="width:72%"></div></div><span style="font-size:11px;color:var(--stone);">72%</span></td>
                   <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
                 <tr>
@@ -1439,7 +1443,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <td data-label="Kunde">Solstad Offshore</td>
                   <td data-label="Type">Utslippsreduksjon</td>
                   <td data-label="Lokasjon">Normand Clipper</td>
-                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill green" style="width:95%"></div></div><span style="font-size:11px;color:var(--stone);">95%</span></td>
                   <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
                 <tr>
@@ -1447,7 +1450,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <td data-label="Kunde">Aker BP</td>
                   <td data-label="Type">Energioptimalisering</td>
                   <td data-label="Lokasjon">Ivar Aasen</td>
-                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill blue" style="width:45%"></div></div><span style="font-size:11px;color:var(--stone);">45%</span></td>
                   <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
                 <tr>
@@ -1455,7 +1457,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <td data-label="Kunde">DOF Subsea</td>
                   <td data-label="Type">Winterization</td>
                   <td data-label="Lokasjon">Skandi Neptune</td>
-                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill orange" style="width:30%"></div></div><span style="font-size:11px;color:var(--stone);">30%</span></td>
                   <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
                 </tr>
                 <tr>
@@ -1463,7 +1464,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <td data-label="Kunde">ConocoPhillips</td>
                   <td data-label="Type">Automasjon</td>
                   <td data-label="Lokasjon">Ekofisk</td>
-                  <td data-label="Fremdrift"><div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div><span style="font-size:11px;color:var(--stone);">60%</span></td>
                   <td data-label="Status"><span class="badge badge-active"><span class="badge-dot"></span>Aktiv</span></td>
                 </tr>
               </tbody>
@@ -1538,7 +1538,6 @@ tr:hover td { background: rgba(11,77,140,0.02); }
                   <th>Lokasjon</th>
                   <th>Start</th>
                   <th>Frist</th>
-                  <th>Fremdrift</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -2182,15 +2181,15 @@ tr:hover td { background: rgba(11,77,140,0.02); }
 <script>
 /* ============== DEFAULT PROJECT DATA ============== */
 const defaultProjects = [
-  { name:'Helideck oppgradering', kunde:'Equinor ASA', type:'Elektroinstallasjon', lokasjon:'Gullfaks B', start:'01.03.2026', frist:'15.06.2026', progress:72, progressColor:'blue', status:'Aktiv' },
-  { name:'SCR-system installasjon', kunde:'Solstad Offshore', type:'Utslippsreduksjon', lokasjon:'Normand Clipper', start:'10.01.2026', frist:'30.04.2026', progress:95, progressColor:'green', status:'Aktiv' },
-  { name:'VFD-oppgradering pumpesystem', kunde:'Aker BP', type:'Energioptimalisering', lokasjon:'Ivar Aasen', start:'05.04.2026', frist:'20.08.2026', progress:45, progressColor:'blue', status:'Aktiv' },
-  { name:'Winterization — maskinrom', kunde:'DOF Subsea', type:'Winterization', lokasjon:'Skandi Neptune', start:'01.05.2026', frist:'30.09.2026', progress:30, progressColor:'orange', status:'Planlagt' },
-  { name:'Schneider EcoStruxure integrasjon', kunde:'ConocoPhillips', type:'Automasjon', lokasjon:'Ekofisk', start:'15.03.2026', frist:'01.07.2026', progress:60, progressColor:'blue', status:'Aktiv' },
-  { name:'Tavleoppgradering — E-rom', kunde:'Vår Energi', type:'Elektroinstallasjon', lokasjon:'Balder FPU', start:'20.02.2026', frist:'10.05.2026', progress:88, progressColor:'green', status:'Aktiv' },
-  { name:'Nødlyssystem fartøy', kunde:'Eidesvik Offshore', type:'Sikkerhetssystem', lokasjon:'Viking Energy', start:'01.02.2026', frist:'15.04.2026', progress:100, progressColor:'green', status:'Fullført' },
-  { name:'Soft Starter installasjon', kunde:'Odfjell Drilling', type:'Energioptimalisering', lokasjon:'Deepsea Atlantic', start:'15.05.2026', frist:'01.09.2026', progress:10, progressColor:'orange', status:'Planlagt' },
-  { name:'Kraftforsyning oppgradering', kunde:'Subsea 7', type:'Elektroinstallasjon', lokasjon:'Seven Vega', start:'10.04.2026', frist:'20.07.2026', progress:35, progressColor:'blue', status:'Aktiv' }
+  { name:'Helideck oppgradering', kunde:'Equinor ASA', type:'Elektroinstallasjon', lokasjon:'Gullfaks B', start:'01.03.2026', frist:'15.06.2026', status:'Aktiv' },
+  { name:'SCR-system installasjon', kunde:'Solstad Offshore', type:'Utslippsreduksjon', lokasjon:'Normand Clipper', start:'10.01.2026', frist:'30.04.2026', status:'Aktiv' },
+  { name:'VFD-oppgradering pumpesystem', kunde:'Aker BP', type:'Energioptimalisering', lokasjon:'Ivar Aasen', start:'05.04.2026', frist:'20.08.2026', status:'Aktiv' },
+  { name:'Winterization — maskinrom', kunde:'DOF Subsea', type:'Winterization', lokasjon:'Skandi Neptune', start:'01.05.2026', frist:'30.09.2026', status:'Planlagt' },
+  { name:'Schneider EcoStruxure integrasjon', kunde:'ConocoPhillips', type:'Automasjon', lokasjon:'Ekofisk', start:'15.03.2026', frist:'01.07.2026', status:'Aktiv' },
+  { name:'Tavleoppgradering — E-rom', kunde:'Vår Energi', type:'Elektroinstallasjon', lokasjon:'Balder FPU', start:'20.02.2026', frist:'10.05.2026', status:'Aktiv' },
+  { name:'Nødlyssystem fartøy', kunde:'Eidesvik Offshore', type:'Sikkerhetssystem', lokasjon:'Viking Energy', start:'01.02.2026', frist:'15.04.2026', status:'Fullført' },
+  { name:'Soft Starter installasjon', kunde:'Odfjell Drilling', type:'Energioptimalisering', lokasjon:'Deepsea Atlantic', start:'15.05.2026', frist:'01.09.2026', status:'Planlagt' },
+  { name:'Kraftforsyning oppgradering', kunde:'Subsea 7', type:'Elektroinstallasjon', lokasjon:'Seven Vega', start:'10.04.2026', frist:'20.07.2026', status:'Aktiv' }
 ];
 
 function getProjects() {
@@ -2241,51 +2240,49 @@ function renderProjects() {
     tdToggle.appendChild(toggleSpan);
     tr.appendChild(tdToggle);
 
-    // Name
-    const tdName = document.createElement('td');
-    tdName.style.fontWeight = '600';
-    tdName.textContent = p.name;
-    tr.appendChild(tdName);
+    // Editable fields helper
+    function makeEditableCell(value, field) {
+      const td = document.createElement('td');
+      td.className = 'editable-cell';
+      td.textContent = value || '';
+      if (field === 'name') td.style.fontWeight = '600';
+      td.onclick = function(e) {
+        if (td.querySelector('input')) return;
+        const current = td.textContent;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = current;
+        input.className = 'inline-edit';
+        td.textContent = '';
+        td.appendChild(input);
+        input.focus();
+        input.select();
+        function save() {
+          const newVal = input.value.trim();
+          if (newVal && newVal !== current) {
+            const projects = getProjects();
+            projects[idx][field] = newVal;
+            saveProjects(projects);
+          }
+          td.textContent = newVal || current;
+          if (field === 'name') td.style.fontWeight = '600';
+        }
+        input.onblur = save;
+        input.onkeydown = function(ev) {
+          if (ev.key === 'Enter') { input.blur(); }
+          if (ev.key === 'Escape') { td.textContent = current; if (field === 'name') td.style.fontWeight = '600'; }
+        };
+        e.stopPropagation();
+      };
+      return td;
+    }
 
-    // Kunde
-    const tdKunde = document.createElement('td');
-    tdKunde.textContent = p.kunde;
-    tr.appendChild(tdKunde);
-
-    // Type
-    const tdType = document.createElement('td');
-    tdType.textContent = p.type;
-    tr.appendChild(tdType);
-
-    // Lokasjon
-    const tdLok = document.createElement('td');
-    tdLok.textContent = p.lokasjon;
-    tr.appendChild(tdLok);
-
-    // Start
-    const tdStart = document.createElement('td');
-    tdStart.textContent = p.start;
-    tr.appendChild(tdStart);
-
-    // Frist
-    const tdFrist = document.createElement('td');
-    tdFrist.textContent = p.frist;
-    tr.appendChild(tdFrist);
-
-    // Progress
-    const tdProgress = document.createElement('td');
-    const pBar = document.createElement('div');
-    pBar.className = 'progress-bar';
-    const pFill = document.createElement('div');
-    pFill.className = 'progress-fill ' + p.progressColor;
-    pFill.style.width = p.progress + '%';
-    pBar.appendChild(pFill);
-    tdProgress.appendChild(pBar);
-    const pLabel = document.createElement('span');
-    pLabel.style.cssText = 'font-size:11px;color:var(--stone);';
-    pLabel.textContent = p.progress + '%';
-    tdProgress.appendChild(pLabel);
-    tr.appendChild(tdProgress);
+    tr.appendChild(makeEditableCell(p.name, 'name'));
+    tr.appendChild(makeEditableCell(p.kunde, 'kunde'));
+    tr.appendChild(makeEditableCell(p.type, 'type'));
+    tr.appendChild(makeEditableCell(p.lokasjon, 'lokasjon'));
+    tr.appendChild(makeEditableCell(p.start, 'start'));
+    tr.appendChild(makeEditableCell(p.frist, 'frist'));
 
     // Status select
     const tdStatus = document.createElement('td');
@@ -2310,7 +2307,7 @@ function renderProjects() {
     detailTr.id = 'project-detail-' + idx;
     detailTr.style.display = 'none';
     const detailTd = document.createElement('td');
-    detailTd.setAttribute('colspan', '9');
+    detailTd.setAttribute('colspan', '8');
     buildDetailPanelDOM(detailTd, p.name, idx);
     detailTr.appendChild(detailTd);
     tbody.appendChild(detailTr);
