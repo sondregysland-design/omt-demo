@@ -1281,6 +1281,42 @@ tr:hover td { background: rgba(11,77,140,0.02); }
   .project-detail-grid { grid-template-columns: 1fr; }
   .todo-filters { flex-wrap: wrap; }
 }
+
+/* ============== AIS LIVE VESSELS ============== */
+@keyframes ais-pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+@keyframes ais-spin { to{transform:rotate(360deg);} }
+
+.ais-vessel-name { font-weight: 600; color: var(--primary-dark); }
+.ais-vessel-mmsi { font-size: 11px; color: var(--stone); font-weight: 400; }
+
+.ais-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.ais-type-cargo { background: rgba(11,77,140,0.08); color: var(--primary); }
+.ais-type-tanker { background: var(--error-bg); color: var(--error); }
+.ais-type-passenger { background: var(--success-bg); color: var(--success); }
+.ais-type-fishing { background: var(--warning-bg); color: var(--warning); }
+.ais-type-special { background: rgba(107,33,168,0.1); color: #6b21a8; }
+.ais-type-highspeed { background: rgba(0,121,107,0.1); color: #00796b; }
+.ais-type-other { background: var(--primary-faint); color: var(--charcoal); }
+
+.ais-speed { font-variant-numeric: tabular-nums; }
+.ais-speed-zero { color: var(--stone); }
+.ais-dest { max-width: 140px; overflow: hidden; text-overflow: ellipsis; color: var(--charcoal); font-size: 12.5px; }
+.ais-length { font-variant-numeric: tabular-nums; color: var(--charcoal); }
+.ais-sort:hover { color: var(--primary) !important; cursor: pointer; }
+.ais-sort.sorted { color: var(--primary) !important; }
+
+@media (max-width: 1100px) {
+  #page-fartoy .hms-summary { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 768px) {
+  #page-fartoy .hms-summary { grid-template-columns: 1fr !important; }
+}
 </style>
 </head>
 <body>
@@ -1670,7 +1706,7 @@ tr:hover td { background: rgba(11,77,140,0.02); }
     <div class="page" id="page-fartoy">
       <div class="page-header">
         <h1>Fartøy</h1>
-        <p>Maritim servicedivisjon og fartøyoversikt</p>
+        <p>Maritim servicedivisjon og live fartøyoversikt — Stavanger-området</p>
       </div>
       <div class="page-content">
         <div class="vessel-hero">
@@ -1696,89 +1732,57 @@ tr:hover td { background: rgba(11,77,140,0.02); }
           </div>
         </div>
 
-        <div class="card" style="margin-bottom:24px;">
-          <div class="card-header">
-            <h2>Kommende oppdrag</h2>
+        <!-- Live AIS KPI-kort -->
+        <div class="hms-summary" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+          <div class="hms-card">
+            <div class="hms-card-value" id="ais-total">—</div>
+            <div class="hms-card-label">Totalt fartøy</div>
           </div>
-          <div class="table-wrap">
-            <table class="mobile-cards">
-              <thead>
-                <tr>
-                  <th>Oppdrag</th>
-                  <th>Kunde</th>
-                  <th>Lokasjon</th>
-                  <th>Dato</th>
-                  <th>Varighet</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="font-weight:600;">Kabellegging og terminering</td>
-                  <td data-label="Kunde">Equinor ASA</td>
-                  <td data-label="Lokasjon">Gullfaks B</td>
-                  <td data-label="Dato">22.04.2026</td>
-                  <td data-label="Varighet">5 dager</td>
-                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
-                </tr>
-                <tr>
-                  <td style="font-weight:600;">Generatorservice</td>
-                  <td data-label="Kunde">Eidesvik Offshore</td>
-                  <td data-label="Lokasjon">Viking Energy — kai</td>
-                  <td data-label="Dato">28.04.2026</td>
-                  <td data-label="Varighet">2 dager</td>
-                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Planlagt</span></td>
-                </tr>
-                <tr>
-                  <td style="font-weight:600;">Navigasjonslys inspeksjon</td>
-                  <td data-label="Kunde">Solstad Offshore</td>
-                  <td data-label="Lokasjon">Normand Vision — offshore</td>
-                  <td data-label="Dato">05.05.2026</td>
-                  <td data-label="Varighet">3 dager</td>
-                  <td data-label="Status"><span class="badge badge-pending"><span class="badge-dot"></span>Tilbud sendt</span></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hms-card">
+            <div class="hms-card-value" id="ais-moving">—</div>
+            <div class="hms-card-label">I bevegelse</div>
+          </div>
+          <div class="hms-card">
+            <div class="hms-card-value" id="ais-moored">—</div>
+            <div class="hms-card-label">Fortøyd / Ankret</div>
+          </div>
+          <div class="hms-card">
+            <div class="hms-card-value" id="ais-avgspeed">—</div>
+            <div class="hms-card-label">Snittfart (bevegelse)</div>
           </div>
         </div>
 
+        <!-- Live fartøytabell -->
         <div class="card">
-          <div class="card-header"><h2>Vedlikeholdslogg</h2></div>
-          <div class="table-wrap">
-            <table class="mobile-cards">
-              <thead>
-                <tr>
-                  <th>Dato</th>
-                  <th>Type</th>
-                  <th>Beskrivelse</th>
-                  <th>Utført av</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="font-weight:600;">15.04.2026</td>
-                  <td data-label="Type">Periodisk</td>
-                  <td data-label="Beskrivelse">500-timers motorservice</td>
-                  <td data-label="Utført av">Ole Johannessen</td>
-                  <td data-label="Status"><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
-                </tr>
-                <tr>
-                  <td style="font-weight:600;">02.04.2026</td>
-                  <td data-label="Type">Inspeksjon</td>
-                  <td data-label="Beskrivelse">Årlig sjøfartsdirektorat-inspeksjon</td>
-                  <td data-label="Utført av">Ekstern</td>
-                  <td data-label="Status"><span class="badge badge-completed"><span class="badge-dot"></span>Godkjent</span></td>
-                </tr>
-                <tr>
-                  <td style="font-weight:600;">20.03.2026</td>
-                  <td data-label="Type">Korrektiv</td>
-                  <td data-label="Beskrivelse">Bytte av hydraulikkslange — dekskran</td>
-                  <td data-label="Utført av">Ole Johannessen</td>
-                  <td data-label="Status"><span class="badge badge-completed"><span class="badge-dot"></span>Fullført</span></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="card-header" style="flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <h2>Fartøy i Stavanger-området</h2>
+              <span class="badge badge-active" style="font-size:11px;"><span class="badge-dot" style="animation:ais-pulse 2s infinite;"></span>LIVE</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <input type="text" id="aisSearch" placeholder="Søk navn, MMSI, destinasjon..." style="padding:7px 12px;border:1px solid var(--border-cream);border-radius:var(--radius);font-size:12px;font-family:var(--font);width:220px;background:var(--ivory);">
+              <select id="aisTypeFilter" style="padding:7px 12px;border:1px solid var(--border-cream);border-radius:var(--radius);font-size:12px;font-family:var(--font);background:var(--ivory);cursor:pointer;">
+                <option value="">Alle typer</option>
+                <option value="cargo">Cargo</option>
+                <option value="tanker">Tanker</option>
+                <option value="passenger">Passasjer</option>
+                <option value="fishing">Fiske</option>
+                <option value="special">Spesial</option>
+              </select>
+              <select id="aisStatusFilter" style="padding:7px 12px;border:1px solid var(--border-cream);border-radius:var(--radius);font-size:12px;font-family:var(--font);background:var(--ivory);cursor:pointer;">
+                <option value="">Alle statuser</option>
+                <option value="moving">I bevegelse</option>
+                <option value="moored">Fortøyd</option>
+                <option value="anchored">For anker</option>
+              </select>
+              <span id="ais-updated" style="font-size:11px;color:var(--stone);">—</span>
+            </div>
+          </div>
+          <div class="table-wrap" id="ais-table-wrap">
+            <div style="text-align:center;padding:48px 20px;color:var(--stone);">
+              <div style="width:28px;height:28px;border:3px solid var(--border-cream);border-top-color:var(--primary);border-radius:50%;animation:ais-spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+              Henter fartøydata fra BarentsWatch...
+            </div>
           </div>
         </div>
       </div>
@@ -2886,6 +2890,7 @@ function showPage(pageId) {
   if (pageId === 'prosjekter') renderProjects();
   if (pageId === 'arkiv') renderArchive();
   if (pageId === 'gjoremal') renderTodos();
+  if (pageId === 'fartoy') aisInit();
   // Close sidebar on mobile
   if (window.innerWidth <= 768) {
     document.getElementById('sidebar').classList.remove('open');
@@ -2918,6 +2923,257 @@ document.addEventListener('DOMContentLoaded', function() {
   renderProjects();
   renderTodos();
 });
+
+// ============== AIS LIVE VESSELS ==============
+(function() {
+  'use strict';
+
+  var AIS_API = '/api/vessels';
+  var aisVessels = [];
+  var aisSortCol = 'name';
+  var aisSortAsc = true;
+  var aisTimer = null;
+  var aisStarted = false;
+
+  var AIS_SHIP_TYPES = {};
+  var i;
+  for (i = 30; i < 40; i++) AIS_SHIP_TYPES[i] = 'Fiske';
+  for (i = 40; i < 50; i++) AIS_SHIP_TYPES[i] = 'Hoyhastighet';
+  AIS_SHIP_TYPES[50] = 'Losfartoy'; AIS_SHIP_TYPES[51] = 'SAR'; AIS_SHIP_TYPES[52] = 'Slepebat';
+  AIS_SHIP_TYPES[53] = 'Havnefartoy'; AIS_SHIP_TYPES[55] = 'Politi';
+  for (i = 54; i < 60; i++) if (!AIS_SHIP_TYPES[i]) AIS_SHIP_TYPES[i] = 'Spesial';
+  for (i = 60; i < 70; i++) AIS_SHIP_TYPES[i] = 'Passasjer';
+  for (i = 70; i < 80; i++) AIS_SHIP_TYPES[i] = 'Cargo';
+  for (i = 80; i < 90; i++) AIS_SHIP_TYPES[i] = 'Tanker';
+  for (i = 90; i < 100; i++) AIS_SHIP_TYPES[i] = 'Annet';
+
+  var AIS_NAV = {
+    0:'Under motorkraft', 1:'For anker', 2:'Ikke under kommando',
+    3:'Begr. manovrerbarhet', 4:'Begr. av dypgang', 5:'Fortoyd',
+    6:'Pa grunn', 7:'Fiske', 8:'Under seil', 14:'AIS-SART', 15:'Ukjent'
+  };
+
+  function aisTypeCat(c) {
+    if (!c) return 'other';
+    if (c >= 30 && c < 40) return 'fishing';
+    if (c >= 40 && c < 50) return 'highspeed';
+    if (c >= 50 && c < 60) return 'special';
+    if (c >= 60 && c < 70) return 'passenger';
+    if (c >= 70 && c < 80) return 'cargo';
+    if (c >= 80 && c < 90) return 'tanker';
+    return 'other';
+  }
+
+  function aisStatusCat(v) {
+    var n = v.navigationalStatus;
+    if (n === 5) return 'moored';
+    if (n === 1) return 'anchored';
+    if ((v.speedOverGround || 0) > 0.5) return 'moving';
+    return 'other';
+  }
+
+  function aisStatusBadge(v) {
+    var cat = aisStatusCat(v);
+    var label = AIS_NAV[v.navigationalStatus] || 'Ukjent';
+    var cls = { moving:'badge-active', anchored:'badge-pending', moored:'badge-completed', other:'badge-pending' };
+    return '<span class="badge ' + (cls[cat]||'badge-pending') + '"><span class="badge-dot"></span>' + aisEsc(label) + '</span>';
+  }
+
+  function aisEsc(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function aisUpdateKPIs(vessels) {
+    var moving = vessels.filter(function(v) { return (v.speedOverGround||0) > 0.5; });
+    var moored = vessels.filter(function(v) { var n = v.navigationalStatus; return n===1||n===5||(v.speedOverGround||0)<=0.5; });
+    var avg = moving.length ? (moving.reduce(function(s,v){return s+(v.speedOverGround||0);},0)/moving.length).toFixed(1) : '0';
+    document.getElementById('ais-total').textContent = vessels.length;
+    document.getElementById('ais-moving').textContent = moving.length;
+    document.getElementById('ais-moored').textContent = moored.length;
+    document.getElementById('ais-avgspeed').textContent = avg + ' kn';
+  }
+
+  function aisApplyFilters() {
+    var search = document.getElementById('aisSearch').value.toLowerCase();
+    var typeF = document.getElementById('aisTypeFilter').value;
+    var statusF = document.getElementById('aisStatusFilter').value;
+    var filtered = aisVessels;
+    if (search) {
+      filtered = filtered.filter(function(v) {
+        return ((v.name||'').toLowerCase().indexOf(search)!==-1) ||
+               (String(v.mmsi||'').indexOf(search)!==-1) ||
+               ((v.destination||'').toLowerCase().indexOf(search)!==-1);
+      });
+    }
+    if (typeF) filtered = filtered.filter(function(v) { return aisTypeCat(v.shipType)===typeF; });
+    if (statusF) filtered = filtered.filter(function(v) { return aisStatusCat(v)===statusF; });
+
+    // Sort
+    var arr = filtered.slice();
+    arr.sort(function(a,b) {
+      var va, vb;
+      switch(aisSortCol) {
+        case 'name': va=(a.name||'').toLowerCase(); vb=(b.name||'').toLowerCase(); break;
+        case 'type': va=a.shipType||0; vb=b.shipType||0; break;
+        case 'status': va=a.navigationalStatus!=null?a.navigationalStatus:99; vb=b.navigationalStatus!=null?b.navigationalStatus:99; break;
+        case 'speed': va=a.speedOverGround||0; vb=b.speedOverGround||0; break;
+        case 'length': va=a.shipLength||0; vb=b.shipLength||0; break;
+        case 'destination': va=(a.destination||'').toLowerCase(); vb=(b.destination||'').toLowerCase(); break;
+        default: return 0;
+      }
+      if (va<vb) return aisSortAsc?-1:1;
+      if (va>vb) return aisSortAsc?1:-1;
+      return 0;
+    });
+    aisRenderTable(arr);
+    aisUpdateKPIs(arr);
+  }
+
+  function aisRenderTable(vessels) {
+    var wrap = document.getElementById('ais-table-wrap');
+    while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
+
+    if (vessels.length === 0) {
+      var empty = document.createElement('div');
+      empty.style.cssText = 'text-align:center;padding:48px 20px;color:var(--stone);';
+      empty.textContent = 'Ingen fartoy matcher filtrene.';
+      wrap.appendChild(empty);
+      return;
+    }
+
+    var table = document.createElement('table');
+    table.className = 'mobile-cards';
+    var thead = document.createElement('thead');
+    var hRow = document.createElement('tr');
+    var cols = [
+      {key:'name',label:'Fartoy'},{key:'type',label:'Type'},{key:'status',label:'Status'},
+      {key:'speed',label:'Fart'},{key:'length',label:'Lengde'},{key:'destination',label:'Destinasjon'}
+    ];
+    cols.forEach(function(col) {
+      var th = document.createElement('th');
+      th.className = 'ais-sort' + (aisSortCol===col.key?' sorted':'');
+      th.textContent = col.label;
+      if (aisSortCol===col.key) {
+        var arrow = document.createElement('span');
+        arrow.style.cssText = 'font-size:9px;margin-left:4px;';
+        arrow.textContent = aisSortAsc ? '\u25B2' : '\u25BC';
+        th.appendChild(arrow);
+      }
+      th.addEventListener('click', function() {
+        if (aisSortCol===col.key) aisSortAsc=!aisSortAsc;
+        else { aisSortCol=col.key; aisSortAsc=true; }
+        aisApplyFilters();
+      });
+      hRow.appendChild(th);
+    });
+    thead.appendChild(hRow);
+    table.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+    vessels.forEach(function(v) {
+      var tr = document.createElement('tr');
+
+      // Name
+      var td1 = document.createElement('td');
+      var n1 = document.createElement('div');
+      n1.className = 'ais-vessel-name';
+      n1.textContent = v.name || 'Ukjent';
+      var n2 = document.createElement('div');
+      n2.className = 'ais-vessel-mmsi';
+      n2.textContent = 'MMSI: ' + (v.mmsi || '\u2014');
+      td1.appendChild(n1);
+      td1.appendChild(n2);
+      tr.appendChild(td1);
+
+      // Type
+      var td2 = document.createElement('td');
+      td2.setAttribute('data-label', 'Type');
+      var tSpan = document.createElement('span');
+      var tCat = aisTypeCat(v.shipType);
+      tSpan.className = 'ais-type-badge ais-type-' + tCat;
+      tSpan.textContent = AIS_SHIP_TYPES[v.shipType] || (v.shipType ? 'Type '+v.shipType : 'Ukjent');
+      td2.appendChild(tSpan);
+      tr.appendChild(td2);
+
+      // Status
+      var td3 = document.createElement('td');
+      td3.setAttribute('data-label', 'Status');
+      var statusCat = aisStatusCat(v);
+      var statusLabel = AIS_NAV[v.navigationalStatus] || 'Ukjent';
+      var badgeCls = {moving:'badge-active',anchored:'badge-pending',moored:'badge-completed',other:'badge-pending'};
+      var badge = document.createElement('span');
+      badge.className = 'badge ' + (badgeCls[statusCat]||'badge-pending');
+      var dot = document.createElement('span');
+      dot.className = 'badge-dot';
+      badge.appendChild(dot);
+      badge.appendChild(document.createTextNode(statusLabel));
+      td3.appendChild(badge);
+      tr.appendChild(td3);
+
+      // Speed
+      var td4 = document.createElement('td');
+      td4.setAttribute('data-label', 'Fart');
+      var spd = v.speedOverGround;
+      td4.className = 'ais-speed' + ((!spd || spd < 0.5) ? ' ais-speed-zero' : '');
+      td4.textContent = spd != null ? spd.toFixed(1) + ' kn' : '\u2014';
+      tr.appendChild(td4);
+
+      // Length
+      var td5 = document.createElement('td');
+      td5.setAttribute('data-label', 'Lengde');
+      td5.className = 'ais-length';
+      td5.textContent = v.shipLength ? v.shipLength + ' m' : '\u2014';
+      tr.appendChild(td5);
+
+      // Destination
+      var td6 = document.createElement('td');
+      td6.setAttribute('data-label', 'Destinasjon');
+      td6.className = 'ais-dest';
+      td6.textContent = v.destination || '\u2014';
+      tr.appendChild(td6);
+
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+  }
+
+  function aisFetch() {
+    fetch(AIS_API)
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(data) {
+        if (data.error) throw new Error(data.error);
+        aisVessels = data;
+        var now = new Date();
+        document.getElementById('ais-updated').textContent =
+          'Oppdatert ' + now.toLocaleTimeString('no-NO', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+        aisApplyFilters();
+      })
+      .catch(function(e) {
+        var wrap = document.getElementById('ais-table-wrap');
+        while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
+        var errDiv = document.createElement('div');
+        errDiv.style.cssText = 'background:var(--error-bg);color:var(--error);padding:16px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;margin:16px;';
+        errDiv.textContent = 'Kunne ikke hente data: ' + e.message;
+        wrap.appendChild(errDiv);
+      });
+  }
+
+  window.aisInit = function() {
+    if (aisStarted) return;
+    aisStarted = true;
+    document.getElementById('aisSearch').addEventListener('input', aisApplyFilters);
+    document.getElementById('aisTypeFilter').addEventListener('change', aisApplyFilters);
+    document.getElementById('aisStatusFilter').addEventListener('change', aisApplyFilters);
+    aisFetch();
+    aisTimer = setInterval(aisFetch, 30000);
+  };
+})();
 </script>
 </body>
 </html>
